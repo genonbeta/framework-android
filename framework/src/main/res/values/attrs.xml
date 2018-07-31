@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="genfw_customListFragmentEmptyImageStyle" format="reference" />
+    <attr name="genfw_customListFragmentEmptyTextStyle" format="reference" />
+    <attr name="genfw_customListFragmentEmptyActionButtonStyle" format="reference" />
+</resources>

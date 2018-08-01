@@ -117,7 +117,7 @@ public class PowerfulActionMode extends Toolbar
 
 		updateVisibility(VISIBLE);
 
-		setNavigationIcon(R.drawable.genfw_close_black_24dp);
+		setNavigationIcon(R.drawable.genfw_close_white_24dp);
 		setNavigationContentDescription(android.R.string.cancel);
 		setNavigationOnClickListener(new OnClickListener()
 		{
@@ -276,12 +276,12 @@ public class PowerfulActionMode extends Toolbar
 			return setSelected(selectable, selected, -1);
 		}
 
-		public boolean setSelected(T selectable, @Nullable int position)
+		public boolean setSelected(T selectable, int position)
 		{
 			return setSelected(selectable, !isSelected(selectable), position);
 		}
 
-		public boolean setSelected(T selectable, boolean selected, @Nullable int position)
+		public boolean setSelected(T selectable, boolean selected, int position)
 		{
 			// if it is already the same
 			if (selected == isSelected(selectable))

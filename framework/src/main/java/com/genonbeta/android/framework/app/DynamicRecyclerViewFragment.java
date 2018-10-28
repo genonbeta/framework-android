@@ -1,10 +1,10 @@
 package com.genonbeta.android.framework.app;
 
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
 import com.genonbeta.android.framework.R;
 import com.genonbeta.android.framework.widget.RecyclerViewAdapter;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * created by: Veli

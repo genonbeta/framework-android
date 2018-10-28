@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.content.FileProvider;
 import android.webkit.MimeTypeMap;
 
 import com.genonbeta.android.framework.io.DocumentFile;
@@ -23,6 +22,8 @@ import java.net.FileNameMap;
 import java.net.URI;
 import java.net.URLConnection;
 import java.util.Locale;
+
+import androidx.core.content.FileProvider;
 
 /**
  * created by: veli

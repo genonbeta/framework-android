@@ -3,8 +3,9 @@ package com.genonbeta.android.framework.preference;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.Nullable;
-import android.support.v4.util.ArrayMap;
+import androidx.annotation.Nullable;
+import androidx.collection.ArrayMap;
+
 import android.util.Log;
 
 import com.genonbeta.android.database.CursorItem;
@@ -448,7 +449,7 @@ public class DbSharablePreferences extends SQLiteDatabase implements SharedPrefe
 		@Override
 		public Editor clear()
 		{
-			delete(new SQLQuery.Select(mCategory));
+			DbSharablePreferences.this.remove(new SQLQuery.Select(mCategory));
 			return this;
 		}
 

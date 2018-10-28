@@ -4,11 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
-import android.support.annotation.RequiresApi;
 
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
+
+import androidx.annotation.RequiresApi;
 
 /**
  * created by: Veli

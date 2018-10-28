@@ -12,7 +12,7 @@ android {
         versionCode rootProject.versionCode
         versionName rootProject.versionName
         resourcePrefix "genfw"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -60,18 +60,16 @@ ext {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    implementation  "com.android.support:appcompat-v7:${rootProject.supportVersion}"
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 
-    implementation 'com.genonbeta.android:gdatabase:1.0'
+    implementation "androidx.appcompat:appcompat:${rootProject.supportVersion}"
+    implementation "androidx.cardview:cardview:${rootProject.supportVersion}"
+    implementation "com.google.android.material:material:${rootProject.supportVersion}"
+    implementation "androidx.recyclerview:recyclerview:${rootProject.supportVersion}"
 
-    implementation "com.android.support:appcompat-v7:${rootProject.supportVersion}"
-    implementation "com.android.support:cardview-v7:${rootProject.supportVersion}"
-    implementation "com.android.support:design:${rootProject.supportVersion}"
-    implementation "com.android.support:recyclerview-v7:${rootProject.supportVersion}"
+    implementation 'com.genonbeta.android:gdatabase:1.0.2.3'
 
     implementation "com.github.kevinsawicki:http-request:6.0"
 }

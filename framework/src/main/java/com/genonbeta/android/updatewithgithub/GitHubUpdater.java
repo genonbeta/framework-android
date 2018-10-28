@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Looper;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+
+import androidx.appcompat.app.AlertDialog;
 
 /**
  * Created by: veli

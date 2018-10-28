@@ -1,15 +1,14 @@
 package com.genonbeta.android.framework.app;
 
-import android.support.design.widget.Snackbar;
-
 import com.genonbeta.android.framework.ui.callback.SnackbarSupport;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * created by: veli
  * date: 7/31/18 11:54 AM
  */
 public class Fragment
-		extends android.support.v4.app.Fragment
+		extends androidx.fragment.app.Fragment
 		implements FragmentImpl, SnackbarSupport
 {
 	private boolean mIsMenuShown;

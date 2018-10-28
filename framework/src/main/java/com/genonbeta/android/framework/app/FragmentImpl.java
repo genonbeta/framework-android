@@ -1,11 +1,10 @@
 package com.genonbeta.android.framework.app;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 
-import com.genonbeta.android.database.SQLiteDatabase;
+import com.google.android.material.snackbar.Snackbar;
+
+import androidx.fragment.app.FragmentActivity;
 
 /**
  * created by: veli
@@ -13,9 +12,9 @@ import com.genonbeta.android.database.SQLiteDatabase;
  */
 public interface FragmentImpl
 {
-	Snackbar createSnackbar(int resId, Object... objects);
+    Snackbar createSnackbar(int resId, Object... objects);
 
-	FragmentActivity getActivity();
+    FragmentActivity getActivity();
 
-	Context getContext();
+    Context getContext();
 }

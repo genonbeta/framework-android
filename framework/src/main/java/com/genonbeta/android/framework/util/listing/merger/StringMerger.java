@@ -1,6 +1,6 @@
 package com.genonbeta.android.framework.util.listing.merger;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.genonbeta.android.framework.util.listing.ComparableMerger;
 

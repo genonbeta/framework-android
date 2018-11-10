@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="genfw_fastscroll_bubble_corner">20dp</dimen>
+    <dimen name="genfw_fastscroll_bubble_size">50dp</dimen>
+    <dimen name="genfw_fastscroll_handle_corner">3dp</dimen>
+    <dimen name="genfw_fastscroll_handle_height">30dp</dimen>
+    <dimen name="genfw_fastscroll_handle_width">6dp</dimen>
+    <dimen name="genfw_fastscroll_handle_inset">9dp</dimen>
+    <dimen name="genfw_fastscroll_handle_clickable_width">24dp</dimen>
+    <dimen name="genfw_fastscroll_handle_padding">2dp</dimen>
+</resources>

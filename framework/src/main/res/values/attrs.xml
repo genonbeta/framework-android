@@ -3,4 +3,10 @@
     <attr name="genfw_customListFragmentEmptyImageStyle" format="reference" />
     <attr name="genfw_customListFragmentEmptyTextStyle" format="reference" />
     <attr name="genfw_customListFragmentEmptyActionButtonStyle" format="reference" />
+    <attr name="genfw_fastScrollStyle" format="reference" />
+    <declare-styleable name="GenfwFastScroller">
+        <attr name="genfw_fastScrollBubbleColor" format="color" />
+        <attr name="genfw_fastScrollHandleColor" format="color" />
+        <attr name="genfw_fastScrollBubbleTextAppearance" format="reference" />
+    </declare-styleable>
 </resources>

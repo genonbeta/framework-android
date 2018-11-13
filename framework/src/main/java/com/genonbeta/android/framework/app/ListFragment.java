@@ -105,6 +105,10 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
 
 	public abstract Z getListView();
 
+	protected void onPrepareRefreshingList() {
+
+	}
+
 	protected void onListRefreshed()
 	{
 	}
@@ -282,6 +286,8 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
 		public void onLoadFinished(Loader<ArrayList<T>> loader, ArrayList<T> data)
 		{
 			if (isResumed()) {
+				onPrepareRefreshingList();
+
 				mAdapter.onUpdate(data);
 				mAdapter.onDataSetChanged();
 

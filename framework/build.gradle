@@ -64,10 +64,10 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 
-    implementation "androidx.appcompat:appcompat:${rootProject.supportVersion}"
-    implementation "androidx.cardview:cardview:${rootProject.supportVersion}"
-    implementation "com.google.android.material:material:${rootProject.supportVersion}"
-    implementation "androidx.recyclerview:recyclerview:${rootProject.supportVersion}"
+    implementation "androidx.appcompat:appcompat:${rootProject.appCompatVersion}"
+    implementation "androidx.cardview:cardview:${rootProject.cardViewVersion}"
+    implementation "com.google.android.material:material:${rootProject.materialVersion}"
+    implementation "androidx.recyclerview:recyclerview:${rootProject.recyclerViewVersion}"
 
     implementation 'com.genonbeta.android:gdatabase:1.0.2.3'
 

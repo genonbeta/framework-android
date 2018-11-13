@@ -1,321 +1,177 @@
 package com.genonbeta.android.framework.widget;
 
 import android.content.Context;
+import android.util.AttributeSet;
+import android.view.MenuInflater;
+import android.view.View;
+
+import com.genonbeta.android.framework.object.Selectable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.collection.ArrayMap;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.AttributeSet;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.AnimationUtils;
-
-import com.genonbeta.android.framework.R;
-import com.genonbeta.android.framework.object.Selectable;
-
-import java.util.ArrayList;
 
 /**
  * created by: Veli
  * date: 19.11.2017 10:01
  */
 
-public class PowerfulActionMode extends Toolbar
+public class PowerfulActionMode extends Toolbar implements PowerfulActionEngine.PowerfulActionEngineImpl
 {
-	private View mContainerLayout;
-	private OnSelectionTaskListener mTaskListener;
-	private MenuInflater mMenuInflater;
-	private ArrayMap<Callback, Holder> mActiveActionModes = new ArrayMap<>();
+    private PowerfulActionToolbar<Toolbar, PowerfulActionMode> mToolbar;
 
-	public PowerfulActionMode(Context context)
-	{
-		super(context);
-		initialize();
-	}
+    public PowerfulActionMode(Context context)
+    {
+        super(context);
+        initialize();
+    }
 
-	public PowerfulActionMode(Context context, @Nullable AttributeSet attrs)
-	{
-		super(context, attrs);
-		initialize();
-	}
+    public PowerfulActionMode(Context context, @Nullable AttributeSet attrs)
+    {
+        super(context, attrs);
+        initialize();
+    }
 
-	public PowerfulActionMode(Context context, @Nullable AttributeSet attrs, int defStyleAttr)
-	{
-		super(context, attrs, defStyleAttr);
-		initialize();
-	}
+    public PowerfulActionMode(Context context, @Nullable AttributeSet attrs, int defStyleAttr)
+    {
+        super(context, attrs, defStyleAttr);
+        initialize();
+    }
 
-	public <T extends Selectable> boolean check(@NonNull Callback<T> callback, T selectable, boolean selected, int position)
-	{
-		if (!selectable.setSelectableSelected(selected))
-			return false;
+    protected void initialize()
+    {
+        mToolbar = new PowerfulActionToolbar<Toolbar, PowerfulActionMode>(getContext(), (Toolbar) this)
+        {
+            @Override
+            public PowerfulActionMode onReturningObject()
+            {
+                return PowerfulActionMode.this;
+            }
+        };
+    }
 
-		if (!hasActive(callback))
-			start(callback);
+    public PowerfulActionToolbar<Toolbar, PowerfulActionMode> getEngineToolbar()
+    {
+        return mToolbar;
+    }
 
-		if (selected)
-			getHolder(callback).getSelectionList().add(selectable);
-		else
-			getHolder(callback).getSelectionList().remove(selectable);
+    public <T extends Selectable> boolean check(@NonNull Callback<T> callback, T selectable, boolean selected, int position)
+    {
+        return check(callback, selectable, selected, position);
+    }
 
-		callback.onItemChecked(getContext(), this, selectable, position);
+    public void finish(@NonNull final Callback callback)
+    {
+        finish(callback);
+    }
 
-		return true;
-	}
+    public View getContainerLayout()
+    {
+        return getEngineToolbar().getContainerLayout();
+    }
 
-	public void finish(@NonNull final Callback callback)
-	{
-		final Holder holder = mActiveActionModes.get(callback);
+    public <T extends Selectable> PowerfulActionEngine.Holder<T> getHolder(Callback<T> callback)
+    {
+        return getHolder(callback);
+    }
 
-		if (holder != null) {
-			callback.onFinish(getContext(), this);
+    public MenuInflater getMenuInflater()
+    {
+        return getEngineToolbar().getMenuInflater();
+    }
 
-			mActiveActionModes.remove(callback);
+    public boolean hasActive(Callback callback)
+    {
+        return getEngineToolbar().getEngine().hasActive(callback);
+    }
 
-			reload(callback);
-		}
-	}
+    public boolean reload(final Callback callback)
+    {
+        return reload(callback);
+    }
 
-	public boolean hasActive(Callback callback)
-	{
-		return mActiveActionModes.containsKey(callback);
-	}
+    public void setContainerLayout(View containerLayout)
+    {
+        getEngineToolbar().setContainerLayout(containerLayout);
+    }
 
-	public View getContainerLayout()
-	{
-		return mContainerLayout;
-	}
+    public void setOnSelectionTaskListener(OnSelectionTaskListener taskListener)
+    {
+        getEngineToolbar().setOnSelectionTaskListener(taskListener);
+    }
 
-	public MenuInflater getMenuInflater()
-	{
-		return mMenuInflater;
-	}
+    public <T extends Selectable> boolean start(@NonNull final Callback<T> callback)
+    {
+        return getEngineToolbar().getEngine().start(callback);
+    }
 
-	public <T extends Selectable> Holder<T> getHolder(Callback<T> callback)
-	{
-		return mActiveActionModes.get(callback);
-	}
+    public <T extends Selectable> boolean start(@NonNull final Callback<T> callback, boolean forceStart)
+    {
+        return getEngineToolbar().getEngine().start(callback, forceStart);
+    }
 
-	protected void initialize()
-	{
-		mContainerLayout = this;
-		mMenuInflater = new MenuInflater(getContext());
-	}
+    @Override
+    public <T extends Selectable, M extends PowerfulActionEngine.PowerfulActionEngineImpl> boolean check(@NonNull PowerfulActionEngine.Callback<T, M> callback, T selectable, boolean selected, int position)
+    {
+        return getEngineToolbar().getEngine().check(callback, selectable, selected, position);
+    }
 
-	public boolean reload(final Callback callback)
-	{
-		getMenu().clear();
+    @Override
+    public void finish(@NonNull PowerfulActionEngine.Callback callback)
+    {
+        getEngineToolbar().getEngine().finish(callback);
+    }
 
-		if (callback == null || !mActiveActionModes.containsKey(callback)) {
-			updateVisibility(GONE);
-			finish(callback);
-			return false;
-		}
+    @Override
+    public <T extends Selectable, M extends PowerfulActionEngine.PowerfulActionEngineImpl> PowerfulActionEngine.Holder<T> getHolder(PowerfulActionEngine.Callback<T, M> callback)
+    {
+        return getEngineToolbar().getEngine().getHolder(callback);
+    }
 
-		updateVisibility(VISIBLE);
+    @Override
+    public boolean hasActive(PowerfulActionEngine.Callback callback)
+    {
+        return getEngineToolbar().getEngine().hasActive(callback);
+    }
 
-		setNavigationIcon(R.drawable.genfw_close_white_24dp);
-		setNavigationContentDescription(android.R.string.cancel);
-		setNavigationOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View view)
-			{
-				finish(callback);
-			}
-		});
+    @Override
+    public boolean reload(PowerfulActionEngine.Callback callback)
+    {
+        return getEngineToolbar().getEngine().reload(callback);
+    }
 
-		boolean result = callback.onCreateActionMenu(getContext(), this, getMenu());
+    @Override
+    public <T extends Selectable, M extends PowerfulActionEngine.PowerfulActionEngineImpl> boolean start(@NonNull PowerfulActionEngine.Callback<T, M> callback)
+    {
+        return getEngineToolbar().getEngine().start(callback);
+    }
 
-		// As we can't define the !?*_- listener with ease I had to hack into it using this
-		if (result) {
-			MenuItem.OnMenuItemClickListener defListener = new MenuItem.OnMenuItemClickListener()
-			{
-				@Override
-				public boolean onMenuItemClick(MenuItem menuItem)
-				{
-					boolean didTrigger = callback.onActionMenuItemSelected(getContext(), PowerfulActionMode.this, menuItem);
+    @Override
+    public <T extends Selectable, M extends PowerfulActionEngine.PowerfulActionEngineImpl> boolean start(@NonNull PowerfulActionEngine.Callback<T, M> callback, boolean forceStart)
+    {
+        return getEngineToolbar().getEngine().start(callback, forceStart);
+    }
 
-					if (didTrigger)
-						finish(callback);
+    protected void updateVisibility(int visibility)
+    {
+        getEngineToolbar().updateVisibility(visibility);
+    }
 
-					return didTrigger;
-				}
-			};
+    public interface Callback<T extends Selectable> extends PowerfulActionToolbar.ToolbarCallback<T, PowerfulActionMode>
+    {
 
-			for (int menuPos = 0; menuPos < getMenu().size(); menuPos++)
-				getMenu()
-						.getItem(menuPos)
-						.setOnMenuItemClickListener(defListener);
-		}
+    }
 
-		return result;
-	}
+    public interface OnSelectionTaskListener extends PowerfulActionEngine.OnSelectionTaskListener<PowerfulActionMode>
+    {
 
-	public void setContainerLayout(View containerLayout)
-	{
-		mContainerLayout = containerLayout;
-	}
+    }
 
-	public void setOnSelectionTaskListener(OnSelectionTaskListener taskListener)
-	{
-		mTaskListener = taskListener;
-	}
-
-	public <T extends Selectable> boolean start(@NonNull final Callback<T> callback)
-	{
-		return start(callback, false);
-	}
-
-	public <T extends Selectable> boolean start(@NonNull final Callback<T> callback, boolean forceStart)
-	{
-		if (!callback.onPrepareActionMenu(getContext(), this) || (mActiveActionModes.containsKey(callback) && !forceStart)) {
-			finish(callback);
-			return false;
-		}
-
-		mActiveActionModes.put(callback, new Holder<>());
-
-		return reload(callback);
-	}
-
-	protected void updateVisibility(int visibility)
-	{
-		int animationId = visibility == VISIBLE ? android.R.anim.fade_in : android.R.anim.fade_out;
-		View view = getContainerLayout() == null ? this : getContainerLayout();
-
-		if (visibility == VISIBLE) {
-			view.setVisibility(visibility);
-			view.setAnimation(AnimationUtils.loadAnimation(getContext(), animationId));
-
-			if (mTaskListener != null)
-				mTaskListener.onSelectionTask(true, this);
-		} else {
-			view.setAnimation(AnimationUtils.loadAnimation(getContext(), animationId));
-			view.setVisibility(visibility);
-
-			if (mTaskListener != null)
-				mTaskListener.onSelectionTask(false, this);
-		}
-	}
-
-	public interface Callback<T extends Selectable>
-	{
-		ArrayList<T> getSelectableList();
-
-		boolean onPrepareActionMenu(Context context, PowerfulActionMode actionMode);
-
-		boolean onCreateActionMenu(Context context, PowerfulActionMode actionMode, Menu menu);
-
-		boolean onActionMenuItemSelected(Context context, PowerfulActionMode actionMode, MenuItem item);
-
-		void onItemChecked(Context context, PowerfulActionMode actionMode, T selectable, int position);
-
-		void onFinish(Context context, PowerfulActionMode actionMode);
-	}
-
-	public static class SelectorConnection<T extends Selectable>
-	{
-		private PowerfulActionMode mMode;
-		private Callback<T> mCallback;
-
-		public SelectorConnection(PowerfulActionMode mode, Callback<T> callback)
-		{
-			mMode = mode;
-			mCallback = callback;
-		}
-
-		public Callback<T> getCallback()
-		{
-			return mCallback;
-		}
-
-		public PowerfulActionMode getMode()
-		{
-			return mMode;
-		}
-
-		public ArrayList<T> getSelectedItemList()
-		{
-			Holder<T> holder = getMode().getHolder(getCallback());
-
-			return holder == null ? new ArrayList<T>() : holder.getSelectionList();
-		}
-
-		public boolean isSelected(T selectable)
-		{
-			Holder<T> holder = getMode().getHolder(getCallback());
-			return holder != null && holder.getSelectionList().contains(selectable);
-		}
-
-		public boolean selectionActive()
-		{
-			return getMode().hasActive(getCallback());
-		}
-
-		public boolean setSelected(RecyclerView.ViewHolder holder)
-		{
-			return setSelected(holder.getAdapterPosition());
-		}
-
-		public boolean setSelected(int position)
-		{
-			return setSelected(getCallback().getSelectableList().get(position), position);
-		}
-
-		public boolean setSelected(T selectable)
-		{
-			return setSelected(selectable, !isSelected(selectable), -1);
-		}
-
-		public boolean setSelected(T selectable, boolean selected)
-		{
-			return setSelected(selectable, selected, -1);
-		}
-
-		public boolean setSelected(T selectable, int position)
-		{
-			return setSelected(selectable, !isSelected(selectable), position);
-		}
-
-		public boolean setSelected(T selectable, boolean selected, int position)
-		{
-			// if it is already the same
-			if (selected == isSelected(selectable))
-				return selected;
-
-			return getMode().check(getCallback(), selectable, selected, position);
-		}
-
-		public boolean removeSelected(T selectable)
-		{
-			if (!getMode().hasActive(getCallback()))
-				return false;
-
-			return getMode().getHolder(getCallback())
-					.getSelectionList()
-					.remove(selectable);
-		}
-	}
-
-	public static class Holder<T extends Selectable>
-	{
-		private final ArrayList<T> mSelectionList = new ArrayList<>();
-
-		public ArrayList<T> getSelectionList()
-		{
-			synchronized (mSelectionList) {
-				return mSelectionList;
-			}
-		}
-	}
-
-	public interface OnSelectionTaskListener
-	{
-		void onSelectionTask(boolean started, PowerfulActionMode actionMode);
-	}
+    public static class SelectorConnection<T extends Selectable> extends PowerfulActionEngine.SelectorConnection<T, PowerfulActionMode>
+    {
+        public SelectorConnection(PowerfulActionMode mode, Callback<T> callback)
+        {
+            super(mode, callback);
+        }
+    }
 }

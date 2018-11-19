@@ -69,7 +69,7 @@ dependencies {
     implementation "com.google.android.material:material:${rootProject.materialVersion}"
     implementation "androidx.recyclerview:recyclerview:${rootProject.recyclerViewVersion}"
 
-    implementation 'com.genonbeta.android:gdatabase:1.0.2.3'
+    implementation 'com.genonbeta.android:gdatabase:1.0.2.4-local7'
 
     implementation "com.github.kevinsawicki:http-request:6.0"
 }

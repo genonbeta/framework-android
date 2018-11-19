@@ -217,7 +217,7 @@ public class DbSharablePreferences extends SQLiteDatabase implements SharedPrefe
 		return defaultValue;
 	}
 
-	public static class StoredData implements DatabaseObject
+	public static class StoredData implements DatabaseObject<Object>
 	{
 		private String mCategory;
 		private String mKey;
@@ -325,19 +325,19 @@ public class DbSharablePreferences extends SQLiteDatabase implements SharedPrefe
 		}
 
 		@Override
-		public void onCreateObject(SQLiteDatabase database)
+		public void onCreateObject(android.database.sqlite.SQLiteDatabase dbInstance, SQLiteDatabase database, Object parent)
 		{
 
 		}
 
 		@Override
-		public void onUpdateObject(SQLiteDatabase database)
+		public void onUpdateObject(android.database.sqlite.SQLiteDatabase dbInstance, SQLiteDatabase database, Object parent)
 		{
 
 		}
 
 		@Override
-		public void onRemoveObject(SQLiteDatabase database)
+		public void onRemoveObject(android.database.sqlite.SQLiteDatabase dbInstance, SQLiteDatabase database, Object parent)
 		{
 
 		}

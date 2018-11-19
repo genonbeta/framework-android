@@ -15,8 +15,9 @@ abstract public class RecyclerViewAdapter<T, V extends RecyclerViewAdapter.ViewH
 		extends RecyclerView.Adapter<V>
 		implements ListAdapterImpl<T>
 {
-	public Context mContext;
+	private Context mContext;
 	private LayoutInflater mInflater;
+	private boolean mHorizontalOrientation;
 
 	public RecyclerViewAdapter(Context context)
 	{
@@ -28,6 +29,11 @@ abstract public class RecyclerViewAdapter<T, V extends RecyclerViewAdapter.ViewH
 	public void onDataSetChanged()
 	{
 		notifyDataSetChanged();
+	}
+
+	public boolean isHorizontalOrientation()
+	{
+		return mHorizontalOrientation;
 	}
 
 	public Context getContext()
@@ -44,6 +50,11 @@ abstract public class RecyclerViewAdapter<T, V extends RecyclerViewAdapter.ViewH
 	public LayoutInflater getInflater()
 	{
 		return mInflater;
+	}
+
+	public void setUseHorizontalOrientation(boolean use)
+	{
+		mHorizontalOrientation = use;
 	}
 
 	public static class ViewHolder extends RecyclerView.ViewHolder

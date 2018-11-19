@@ -57,12 +57,12 @@ public class PowerfulActionMode extends Toolbar implements PowerfulActionEngine.
 
     public <T extends Selectable> boolean check(@NonNull Callback<T> callback, T selectable, boolean selected, int position)
     {
-        return check(callback, selectable, selected, position);
+        return getEngineToolbar().getEngine().check(callback, selectable, selected, position);
     }
 
     public void finish(@NonNull final Callback callback)
     {
-        finish(callback);
+        getEngineToolbar().getEngine().finish(callback);
     }
 
     public View getContainerLayout()
@@ -72,7 +72,7 @@ public class PowerfulActionMode extends Toolbar implements PowerfulActionEngine.
 
     public <T extends Selectable> PowerfulActionEngine.Holder<T> getHolder(Callback<T> callback)
     {
-        return getHolder(callback);
+        return getEngineToolbar().getEngine().getHolder(callback);
     }
 
     public MenuInflater getMenuInflater()
@@ -87,7 +87,7 @@ public class PowerfulActionMode extends Toolbar implements PowerfulActionEngine.
 
     public boolean reload(final Callback callback)
     {
-        return reload(callback);
+        return getEngineToolbar().getEngine().reload(callback);
     }
 
     public void setContainerLayout(View containerLayout)

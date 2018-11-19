@@ -12,23 +12,35 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 
 abstract public class DynamicRecyclerViewFragment<T, V extends RecyclerViewAdapter.ViewHolder, Z extends RecyclerViewAdapter<T, V>>
-		extends RecyclerViewFragment<T, V, Z>
+        extends RecyclerViewFragment<T, V, Z>
 {
-	@Override
-	public RecyclerView.LayoutManager onLayoutManager()
-	{
-		return new GridLayoutManager(getContext(), isScreenLarge() ? 2 : 1);
-	}
+    @Override
+    public RecyclerView.LayoutManager onLayoutManager()
+    {
+        return new GridLayoutManager(getContext(), isScreenLarge() ? 2 : 1, isHorizontalOrientation() ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL, false);
+    }
 
-	public boolean isScreenLandscape()
-	{
-		return getContext() != null &&
-				getContext().getResources().getBoolean(R.bool.genfw_screen_isLandscape);
-	}
+    @Override
+    public boolean onSetListAdapter(Z adapter)
+    {
+        adapter.setUseHorizontalOrientation(isHorizontalOrientation());
+        return super.onSetListAdapter(adapter);
+    }
 
-	public boolean isScreenLarge()
-	{
-		return getContext() != null &&
-				getContext().getResources().getBoolean(R.bool.genfw_screen_isLarge);
-	}
+    public boolean isHorizontalOrientation()
+    {
+        return false;
+    }
+
+    public boolean isScreenLandscape()
+    {
+        return getContext() != null &&
+                getContext().getResources().getBoolean(R.bool.genfw_screen_isLandscape);
+    }
+
+    public boolean isScreenLarge()
+    {
+        return getContext() != null &&
+                getContext().getResources().getBoolean(R.bool.genfw_screen_isLarge);
+    }
 }

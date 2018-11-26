@@ -34,6 +34,8 @@ public class FileUtils
 	private static Intent applySecureOpenIntent(Uri secureUri, String type, Intent intent)
 	{
 		return intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+				.putExtra(Intent.EXTRA_STREAM, secureUri)
+				.setType(type)
 				.setDataAndType(secureUri, type);
 	}
 

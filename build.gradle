@@ -32,8 +32,8 @@ ext {
     buildToolsVersion = "28.0.3"
     minSdkVersion = "11"
     targetSdkVersion = "28"
-    versionName = "1.0.2.3"
-    versionCode = 4
+    versionName = "1.0.2.4"
+    versionCode = 5
     appCompatVersion = "1.0.2"
     cardViewVersion = "1.0.0"
     materialVersion = "1.0.0"

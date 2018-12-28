@@ -262,7 +262,7 @@ public class FastScroller extends LinearLayout
                         mRecyclerView.getChildAt(0) == null ||
                         isRecyclerViewNotScrollable() ||
                         mMaxVisibility != View.VISIBLE
-                ) {
+        ) {
             super.setVisibility(INVISIBLE);
         } else {
             super.setVisibility(VISIBLE);
@@ -316,6 +316,31 @@ public class FastScroller extends LinearLayout
                     relativePos * (getWidth() - mHandle.getWidth()))
             );
         }
+
+        /*
+        if (isVertical()) {
+            mBubble.setY(Utils.getValueInRange(
+                    0,
+                    getHeight() - mBubble.getHeight(),
+                    relativePos * (getHeight() - mHandle.getHeight()) + mBubbleOffset)
+            );
+            mHandle.setY(Utils.getValueInRange(
+                    0,
+                    getHeight() - mHandle.getHeight(),
+                    relativePos * (getHeight() - mHandle.getHeight()))
+            );
+        } else {
+            mBubble.setX(Utils.getValueInRange(
+                    0,
+                    getWidth() - mBubble.getWidth(),
+                    relativePos * (getWidth() - mHandle.getWidth()) + mBubbleOffset)
+            );
+            mHandle.setX(Utils.getValueInRange(
+                    0,
+                    getWidth() - mHandle.getWidth(),
+                    relativePos * (getWidth() - mHandle.getWidth()))
+            );
+        }*/
     }
 
     public boolean isVertical()

@@ -30,13 +30,13 @@ allprojects {
 ext {
     compileSdkVersion = 28
     buildToolsVersion = "28.0.3"
-    minSdkVersion = "11"
-    targetSdkVersion = "28"
-    versionName = "1.0.2.5"
+    minSdkVersion = 11
+    targetSdkVersion = 28
+    versionName = "1.0.2.6-alpha01"
     versionCode = 6
     appCompatVersion = "1.0.2"
     cardViewVersion = "1.0.0"
-    materialVersion = "1.0.0"
+    materialVersion = "1.1.0-alpha02"
     recyclerViewVersion = "1.0.0"
 }
 

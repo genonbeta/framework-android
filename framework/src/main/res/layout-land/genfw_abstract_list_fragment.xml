@@ -34,12 +34,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/genfw_customListFragment_emptyView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:visibility="gone">
@@ -48,11 +48,11 @@
                     android:id="@+id/genfw_customListfragment_visualContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/genfw_customListFragment_emptyImageView"
                         style="?genfw_customListFragmentEmptyImageStyle"
                         android:layout_width="wrap_content"
@@ -70,17 +70,16 @@
 
                 </LinearLayout>
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/genfw_customListFragment_emptyActionButton"
                     style="?genfw_customListFragmentEmptyActionButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/genfw_customListfragment_visualContainer"
-                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="2dp"
                     android:visibility="gone" />
 
-            </RelativeLayout>
+            </LinearLayout>
         </FrameLayout>
     </FrameLayout>
 </FrameLayout>

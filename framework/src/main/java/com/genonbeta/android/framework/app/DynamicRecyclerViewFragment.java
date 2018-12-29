@@ -17,7 +17,8 @@ abstract public class DynamicRecyclerViewFragment<T, V extends RecyclerViewAdapt
     @Override
     public RecyclerView.LayoutManager onLayoutManager()
     {
-        return new GridLayoutManager(getContext(), isScreenLarge() ? 2 : 1, isHorizontalOrientation() ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL, false);
+        return new GridLayoutManager(getContext(), isScreenLarge() && !isHorizontalOrientation() ? 2 : 1,
+                isHorizontalOrientation() ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL, false);
     }
 
     @Override

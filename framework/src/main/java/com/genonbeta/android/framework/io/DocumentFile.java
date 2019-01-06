@@ -21,10 +21,12 @@ abstract public class DocumentFile
 	public static final String TAG = DocumentFile.class.getSimpleName();
 
 	private final DocumentFile mParent;
+	private Uri mOriginalUri;
 
-	public DocumentFile(DocumentFile parent)
+	public DocumentFile(DocumentFile parent, Uri originalUri)
 	{
 		mParent = parent;
+		setOriginalUri(originalUri);
 	}
 
 	public static DocumentFile fromFile(File file)
@@ -36,13 +38,13 @@ abstract public class DocumentFile
 	{
 		if (Build.VERSION.SDK_INT >= 21)
 			try {
-				return new TreeDocumentFile(null, context, prepareTree ? prepareUri(uri) : uri);
+				return new TreeDocumentFile(null, context, prepareTree ? prepareUri(uri) : uri, uri);
 			} catch (Exception e) {
 				// it was expected it might not be TreeDocumentFile
 			}
 
 		try {
-			return new StreamDocumentFile(new StreamInfo(context, uri));
+			return new StreamDocumentFile(new StreamInfo(context, uri), uri);
 		} catch (Exception e) {
 			// Now something is wrong
 		}
@@ -56,6 +58,15 @@ abstract public class DocumentFile
 		return obj instanceof DocumentFile
 				&& getUri() != null
 				&& getUri().equals(((DocumentFile) obj).getUri());
+	}
+
+	public Uri getOriginalUri()
+	{
+		return mOriginalUri;
+	}
+
+	protected void setOriginalUri(Uri uri) {
+		mOriginalUri = uri;
 	}
 
 	public abstract DocumentFile createFile(String mimeType, String displayName);

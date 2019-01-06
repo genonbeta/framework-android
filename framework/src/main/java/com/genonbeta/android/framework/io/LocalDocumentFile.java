@@ -19,7 +19,7 @@ public class LocalDocumentFile extends DocumentFile
 
 	public LocalDocumentFile(DocumentFile parent, File file)
 	{
-		super(parent);
+		super(parent, Uri.fromFile(file));
 		mFile = file;
 	}
 

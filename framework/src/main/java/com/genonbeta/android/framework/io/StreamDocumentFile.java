@@ -14,9 +14,9 @@ public class StreamDocumentFile extends DocumentFile
 {
 	private StreamInfo mStream;
 
-	public StreamDocumentFile(StreamInfo streamInfo)
+	public StreamDocumentFile(StreamInfo streamInfo, Uri original)
 	{
-		super(null);
+		super(null, original);
 		mStream = streamInfo;
 	}
 

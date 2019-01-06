@@ -11,9 +11,9 @@ import android.provider.DocumentsContract;
 import android.text.TextUtils;
 import android.util.Log;
 
-import java.io.FileNotFoundException;
-
 import androidx.annotation.RequiresApi;
+
+import java.io.FileNotFoundException;
 
 /**
  * created by: Veli
@@ -35,9 +35,9 @@ public class TreeDocumentFile extends DocumentFile
 
     private boolean mExists;
 
-    public TreeDocumentFile(DocumentFile parent, Context context, Uri uri) throws Exception
+    public TreeDocumentFile(DocumentFile parent, Context context, Uri uri, Uri original) throws Exception
     {
-        super(parent);
+        super(parent, original);
 
         mContext = context;
         mUri = uri;
@@ -47,12 +47,14 @@ public class TreeDocumentFile extends DocumentFile
 
     public TreeDocumentFile(DocumentFile parent, Context context, Cursor cursor)
     {
-        super(parent);
+        super(parent, null);
 
         mContext = context;
 
         if (loadFrom(cursor))
             mUri = DocumentsContract.buildDocumentUriUsingTree(parent.getUri(), mId);
+
+        setOriginalUri(mUri);
     }
 
     @Override
@@ -62,7 +64,7 @@ public class TreeDocumentFile extends DocumentFile
             Uri newFile = DocumentsContract.createDocument(mContext.getContentResolver(), mUri, mimeType, displayName);
 
             if (newFile != null)
-                return new TreeDocumentFile(this, mContext, newFile);
+                return new TreeDocumentFile(this, mContext, newFile, newFile);
         } catch (Exception e) {
             e.printStackTrace();
         }

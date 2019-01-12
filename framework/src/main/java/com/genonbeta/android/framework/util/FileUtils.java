@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import androidx.core.content.FileProvider;
@@ -31,6 +32,8 @@ import java.util.Locale;
  */
 public class FileUtils
 {
+    public static final String TAG = FileUtils.class.getSimpleName();
+
     public static void copy(Context context, DocumentFile source, DocumentFile destination,
                             Interrupter interrupter, int bufferLength, int socketTimeout) throws Exception
     {
@@ -197,7 +200,11 @@ public class FileUtils
         try {
             return getSecureUri(context, documentFile);
         } catch (Throwable e) {
-            e.printStackTrace();
+            // do nothing
+            Log.d(TAG, String.format(Locale.US,
+                    "Cannot create secure uri for the file %s with error message '%s'",
+                    documentFile.getName(),
+                    e.getMessage()));
         }
 
         return documentFile.getUri();
@@ -274,7 +281,9 @@ public class FileUtils
             context.startActivity(intent);
             return true;
         } catch (Throwable e) {
-            e.printStackTrace();
+            Log.d(TAG, String.format(Locale.US,
+                    "Open uri request failed with error message '%s'",
+                    e.getMessage()));
         }
 
         return false;

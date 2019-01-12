@@ -4,10 +4,15 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.widget.TextViewCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.genonbeta.android.framework.R;
 import com.genonbeta.android.framework.widget.recyclerview.fastscroll.RecyclerViewScrollListener;
@@ -15,10 +20,6 @@ import com.genonbeta.android.framework.widget.recyclerview.fastscroll.SectionTit
 import com.genonbeta.android.framework.widget.recyclerview.fastscroll.Utils;
 import com.genonbeta.android.framework.widget.recyclerview.fastscroll.provider.DefaultScrollerViewProvider;
 import com.genonbeta.android.framework.widget.recyclerview.fastscroll.provider.ScrollerViewProvider;
-
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.core.widget.TextViewCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class FastScroller extends LinearLayout
 {
@@ -179,7 +180,10 @@ public class FastScroller extends LinearLayout
 
         if (!isInEditMode()) {
             //sometimes recycler starts with a defined scroll (e.g. when coming from saved state)
-            mScrollListener.updateHandlePosition(mRecyclerView);
+
+            // Disabled since this was triggering another change
+            // on layout every time it was scrolled (esp. manual handle change).
+            //mScrollListener.updateHandlePosition(mRecyclerView);
         }
 
     }
@@ -225,12 +229,14 @@ public class FastScroller extends LinearLayout
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     mManuallyChangingPosition = false;
+                    mRecyclerView.scrollBy(0, 0);
 
                     if (mTitleProvider != null)
                         mViewProvider.onHandleReleased();
 
                     return true;
                 }
+
                 return false;
             }
         });
@@ -279,16 +285,40 @@ public class FastScroller extends LinearLayout
 
     private void setRecyclerViewPosition(float relativePos)
     {
-        if (mRecyclerView == null)
+        if (mRecyclerView == null || mRecyclerView.getAdapter() == null)
             return;
 
-        int itemCount = mRecyclerView.getAdapter().getItemCount();
-        int targetPos = (int) Utils.getValueInRange(0, itemCount - 1, (int) (relativePos * (float) itemCount));
+        int offset;
+        int extent;
+        int range;
 
-        mRecyclerView.scrollToPosition(targetPos);
+        if (isVertical()) {
+            offset = mRecyclerView.computeVerticalScrollOffset();
+            extent = mRecyclerView.computeVerticalScrollExtent();
+            range = mRecyclerView.computeVerticalScrollRange();
+        } else {
+            offset = mRecyclerView.computeHorizontalScrollOffset();
+            extent = mRecyclerView.computeHorizontalScrollExtent();
+            range = mRecyclerView.computeHorizontalScrollRange();
+        }
 
-        if (mTitleProvider != null && mBubbleTextView != null)
-            mBubbleTextView.setText(mTitleProvider.getSectionTitle(targetPos));
+        float expectedPosition = range * relativePos;
+        float computedExtent = (float) extent * (offset / (float) (range - extent));
+        float currentOffset = offset + computedExtent;
+        int difference = (int) (expectedPosition - currentOffset);
+
+        if (isVertical())
+            mRecyclerView.scrollBy(0, difference);
+        else
+            mRecyclerView.scrollBy(difference, 0);
+
+        {
+            int itemCount = mRecyclerView.getAdapter().getItemCount();
+            int targetPos = (int) Utils.getValueInRange(0, itemCount - 1, (int) (relativePos * (float) itemCount));
+
+            if (mTitleProvider != null && mBubbleTextView != null)
+                mBubbleTextView.setText(mTitleProvider.getSectionTitle(targetPos));
+        }
     }
 
     public void setScrollerPosition(float relativePos)
@@ -299,48 +329,24 @@ public class FastScroller extends LinearLayout
                     getHeight() - mBubble.getHeight(),
                     relativePos * (getHeight() - mHandle.getHeight()) + mBubbleOffset)
             );
+
             mHandle.setY(Utils.getValueInRange(
                     0,
                     getHeight() - mHandle.getHeight(),
-                    relativePos * (getHeight() - mHandle.getHeight()))
-            );
+                    relativePos * (getHeight() - mHandle.getHeight())));
         } else {
             mBubble.setX(Utils.getValueInRange(
                     0,
                     getWidth() - mBubble.getWidth(),
                     relativePos * (getWidth() - mHandle.getWidth()) + mBubbleOffset)
             );
+
             mHandle.setX(Utils.getValueInRange(
                     0,
                     getWidth() - mHandle.getWidth(),
                     relativePos * (getWidth() - mHandle.getWidth()))
             );
         }
-
-        /*
-        if (isVertical()) {
-            mBubble.setY(Utils.getValueInRange(
-                    0,
-                    getHeight() - mBubble.getHeight(),
-                    relativePos * (getHeight() - mHandle.getHeight()) + mBubbleOffset)
-            );
-            mHandle.setY(Utils.getValueInRange(
-                    0,
-                    getHeight() - mHandle.getHeight(),
-                    relativePos * (getHeight() - mHandle.getHeight()))
-            );
-        } else {
-            mBubble.setX(Utils.getValueInRange(
-                    0,
-                    getWidth() - mBubble.getWidth(),
-                    relativePos * (getWidth() - mHandle.getWidth()) + mBubbleOffset)
-            );
-            mHandle.setX(Utils.getValueInRange(
-                    0,
-                    getWidth() - mHandle.getWidth(),
-                    relativePos * (getWidth() - mHandle.getWidth()))
-            );
-        }*/
     }
 
     public boolean isVertical()

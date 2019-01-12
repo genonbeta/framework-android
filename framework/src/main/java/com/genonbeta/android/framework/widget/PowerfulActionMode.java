@@ -40,7 +40,7 @@ public class PowerfulActionMode extends Toolbar implements PowerfulActionEngine.
 
     protected void initialize()
     {
-        mToolbar = new PowerfulActionToolbar<Toolbar, PowerfulActionMode>(getContext(), (Toolbar) this)
+        mToolbar = new PowerfulActionToolbar<Toolbar, PowerfulActionMode>(getContext(), this)
         {
             @Override
             public PowerfulActionMode onReturningObject()

@@ -1,11 +1,13 @@
 package com.genonbeta.android.framework.widget.recyclerview.fastscroll;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.genonbeta.android.framework.widget.recyclerview.FastScroller;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Michal on 04/08/16.
@@ -41,34 +43,44 @@ public class RecyclerViewScrollListener extends RecyclerView.OnScrollListener
     }
 
     @Override
-    public void onScrolled(RecyclerView rv, int dx, int dy)
+    public void onScrolled(@NonNull RecyclerView rv, int dx, int dy)
     {
-        if (mScroller.shouldUpdateHandlePosition()) {
+        if (mScroller.shouldUpdateHandlePosition())
             updateHandlePosition(rv);
-        }
     }
 
     public void updateHandlePosition(RecyclerView rv)
     {
-        float relativePos;
+        int offset;
+        int extent;
+        int range;
+
         if (mScroller.isVertical()) {
-            int offset = rv.computeVerticalScrollOffset();
-            int extent = rv.computeVerticalScrollExtent();
-            int range = rv.computeVerticalScrollRange();
-            relativePos = offset / (float) (range - extent);
+            offset = rv.computeVerticalScrollOffset();
+            extent = rv.computeVerticalScrollExtent();
+            range = rv.computeVerticalScrollRange();
         } else {
-            int offset = rv.computeHorizontalScrollOffset();
-            int extent = rv.computeHorizontalScrollExtent();
-            int range = rv.computeHorizontalScrollRange();
-            relativePos = offset / (float) (range - extent);
+            offset = rv.computeHorizontalScrollOffset();
+            extent = rv.computeHorizontalScrollExtent();
+            range = rv.computeHorizontalScrollRange();
         }
+
+        //float relativePos = offset / (float) (range - extent);
+        // Subtracting extent introduces opposite direction numbers
+        // even though the direction of scrolling is the same.
+        // To overcome this, while preserving the highest and lowest possible
+        // location for the bubble, we slowly add the extent number.
+        float computedExtent = (float) extent * (offset / (float) (range - extent));
+        float relativePos = (offset + computedExtent) / (float) range;
+
         mScroller.setScrollerPosition(relativePos);
         notifyListeners(relativePos);
     }
 
     public void notifyListeners(float relativePos)
     {
-        for (ScrollerListener listener : mListeners) listener.onScroll(relativePos);
+        for (ScrollerListener listener : mListeners)
+            listener.onScroll(relativePos);
     }
 
     public interface ScrollerListener

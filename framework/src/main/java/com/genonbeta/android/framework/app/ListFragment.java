@@ -90,7 +90,8 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         super.onActivityCreated(savedInstanceState);
 
         setListAdapter(mAdapter);
-        getLoaderManager().initLoader(TASK_ID_REFRESH, null, mLoaderCallbackRefresh);
+        LoaderManager.getInstance(this)
+                .initLoader(TASK_ID_REFRESH, null, mLoaderCallbackRefresh);
     }
 
     public abstract E onAdapter();

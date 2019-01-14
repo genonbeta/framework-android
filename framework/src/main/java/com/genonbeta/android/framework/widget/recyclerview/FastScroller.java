@@ -75,7 +75,7 @@ public class FastScroller extends LinearLayout
     }
 
     /**
-     * Attach the {@link FastScroller} to {@link RecyclerView}. Should be used after the adapter is set
+     * Attach the {@link FastScroller} to {@link RecyclerView}. ShoulmHandle.setMinimumHeight((int) computedExtent);d be used after the adapter is set
      * to the {@link RecyclerView}. If the adapter implements SectionTitleProvider, the FastScroller
      * will show a bubble with title.
      *
@@ -89,6 +89,7 @@ public class FastScroller extends LinearLayout
             mTitleProvider = (SectionTitleProvider) recyclerView.getAdapter();
 
         recyclerView.addOnScrollListener(mScrollListener);
+
         invalidateVisibility();
 
         recyclerView.setOnHierarchyChangeListener(new OnHierarchyChangeListener()
@@ -302,23 +303,44 @@ public class FastScroller extends LinearLayout
             range = mRecyclerView.computeHorizontalScrollRange();
         }
 
+        {
+            View viewUnder = isVertical()
+                    ? mRecyclerView.findChildViewUnder(0, mHandle.getY())
+                    : mRecyclerView.findChildViewUnder(mHandle.getX(), 0);
+
+            RecyclerView.ViewHolder viewHolder = viewUnder == null
+                    ? null
+                    : mRecyclerView.findContainingViewHolder(viewUnder);
+
+            int itemCount = mRecyclerView.getAdapter().getItemCount();
+            int targetPos = viewHolder == null ? -1 : viewHolder.getAdapterPosition();
+
+            if (targetPos < 0 || targetPos >= itemCount)
+                // This is an old fallback method.
+                // The problem is it assumes each child has the same length.
+                // Let's hope that the method above always locates what is under.
+                targetPos = (int) Utils.getValueInRange(0, itemCount - 1, (int) (relativePos * (float) itemCount));
+
+            if (mTitleProvider != null && mBubbleTextView != null)
+                mBubbleTextView.setText(mTitleProvider.getSectionTitle(targetPos));
+        }
+
+        //float computedExtent = (float) extent * (offset / (float) (range - extent));
+        //float currentOffset = offset + computedExtent;
+        //  For: Change-a
         float expectedPosition = range * relativePos;
-        float computedExtent = (float) extent * (offset / (float) (range - extent));
-        float currentOffset = offset + computedExtent;
-        int difference = (int) (expectedPosition - currentOffset);
+
+        // Change-a
+        // We don't want to scroll the view when it still covers all the content that is requested.
+        if (expectedPosition <= extent && offset == 0)
+            return;
+
+        int difference = (int) (expectedPosition - (offset + extent));
 
         if (isVertical())
             mRecyclerView.scrollBy(0, difference);
         else
             mRecyclerView.scrollBy(difference, 0);
-
-        {
-            int itemCount = mRecyclerView.getAdapter().getItemCount();
-            int targetPos = (int) Utils.getValueInRange(0, itemCount - 1, (int) (relativePos * (float) itemCount));
-
-            if (mTitleProvider != null && mBubbleTextView != null)
-                mBubbleTextView.setText(mTitleProvider.getSectionTitle(targetPos));
-        }
     }
 
     public void setScrollerPosition(float relativePos)

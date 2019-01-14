@@ -1,5 +1,7 @@
 package com.genonbeta.android.framework.widget.recyclerview.fastscroll;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -70,8 +72,13 @@ public class RecyclerViewScrollListener extends RecyclerView.OnScrollListener
         // even though the direction of scrolling is the same.
         // To overcome this, while preserving the highest and lowest possible
         // location for the bubble, we slowly add the extent number.
-        float computedExtent = (float) extent * (offset / (float) (range - extent));
-        float relativePos = (offset + computedExtent) / (float) range;
+
+        // Another attempt to sync the positions for scrolling the view versus the handle
+        //float computedExtent = (float) extent * (offset / (float) (range - extent));
+        //float relativePos = (offset + computedExtent) / (float) range;
+        float relativePos = offset <= extent
+                ? (offset <= 0 ? 0f : ((float) offset + ((float) extent * (offset / (float) (range - extent)))) / range)
+                : (offset + extent) / (float) range;
 
         mScroller.setScrollerPosition(relativePos);
         notifyListeners(relativePos);

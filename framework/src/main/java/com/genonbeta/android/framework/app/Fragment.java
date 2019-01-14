@@ -1,5 +1,7 @@
 package com.genonbeta.android.framework.app;
 
+import android.view.View;
+
 import com.genonbeta.android.framework.ui.callback.SnackbarSupport;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -12,11 +14,15 @@ public class Fragment
 		implements FragmentImpl, SnackbarSupport
 {
 	private boolean mIsMenuShown;
+	private View mSnackbarContainer;
+	private int mSnackbarLength = Snackbar.LENGTH_LONG;
 
 	public Snackbar createSnackbar(int resId, Object... objects)
 	{
-		return getView() != null
-				? Snackbar.make(getView(), getString(resId, objects), Snackbar.LENGTH_LONG)
+		View drawOverView = mSnackbarContainer == null ? getView() : mSnackbarContainer;
+
+		return drawOverView!= null
+				? Snackbar.make(drawOverView, getString(resId, objects), mSnackbarLength)
 				: null;
 	}
 
@@ -30,5 +36,15 @@ public class Fragment
 	{
 		super.setMenuVisibility(menuVisible);
 		mIsMenuShown = menuVisible;
+	}
+
+	public void setSnackbarLength(int length)
+	{
+		mSnackbarLength = length;
+	}
+
+	public void setSnackbarContainer(View view)
+	{
+		mSnackbarContainer = view;
 	}
 }

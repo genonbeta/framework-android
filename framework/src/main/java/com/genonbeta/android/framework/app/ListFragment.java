@@ -11,16 +11,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.genonbeta.android.framework.R;
-import com.genonbeta.android.framework.widget.ListAdapterImpl;
-
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
+
+import com.genonbeta.android.framework.R;
+import com.genonbeta.android.framework.widget.ListAdapterImpl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by: veli
@@ -113,7 +114,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
     {
     }
 
-    public AsyncTaskLoader<ArrayList<T>> createLoader()
+    public AsyncTaskLoader<List<T>> createLoader()
     {
         return new ListLoader<>(mAdapter);
     }
@@ -264,14 +265,14 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         mEmptyActionButton.setVisibility(use ? View.VISIBLE : View.GONE);
     }
 
-    private class LoaderCallbackRefresh implements LoaderManager.LoaderCallbacks<ArrayList<T>>
+    private class LoaderCallbackRefresh implements LoaderManager.LoaderCallbacks<List<T>>
     {
         private boolean mRunning = false;
         private boolean mReloadRequested = false;
 
         @NonNull
         @Override
-        public Loader<ArrayList<T>> onCreateLoader(int id, Bundle args)
+        public Loader<List<T>> onCreateLoader(int id, Bundle args)
         {
             mReloadRequested = false;
             mRunning = true;
@@ -283,7 +284,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         }
 
         @Override
-        public void onLoadFinished(Loader<ArrayList<T>> loader, ArrayList<T> data)
+        public void onLoadFinished(Loader<List<T>> loader, List<T> data)
         {
             if (isResumed()) {
                 onPrepareRefreshingList();
@@ -302,7 +303,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         }
 
         @Override
-        public void onLoaderReset(@NonNull Loader<ArrayList<T>> loader)
+        public void onLoaderReset(@NonNull Loader<List<T>> loader)
         {
 
         }
@@ -319,7 +320,8 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
 
         public void refresh()
         {
-            getLoaderManager().restartLoader(TASK_ID_REFRESH, null, mLoaderCallbackRefresh);
+            LoaderManager.getInstance(ListFragment.this)
+                    .restartLoader(TASK_ID_REFRESH, null, mLoaderCallbackRefresh);
         }
 
         public boolean requestRefresh()
@@ -336,7 +338,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         }
     }
 
-    public static class ListLoader<G> extends AsyncTaskLoader<ArrayList<G>>
+    public static class ListLoader<G> extends AsyncTaskLoader<List<G>>
     {
         private ListAdapterImpl<G> mAdapter;
 
@@ -354,7 +356,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         }
 
         @Override
-        public ArrayList<G> loadInBackground()
+        public List<G> loadInBackground()
         {
             return mAdapter.onLoad();
         }

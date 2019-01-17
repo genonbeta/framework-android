@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * created by: veli
@@ -14,9 +15,9 @@ public interface ListAdapterImpl<T>
 {
 	void onDataSetChanged();
 
-	ArrayList<T> onLoad();
+	List<T> onLoad();
 
-	void onUpdate(ArrayList<T> passedItem);
+	void onUpdate(List<T> passedItem);
 
 	Context getContext();
 
@@ -24,5 +25,5 @@ public interface ListAdapterImpl<T>
 
 	LayoutInflater getInflater();
 
-	ArrayList<T> getList();
+	List<T> getList();
 }

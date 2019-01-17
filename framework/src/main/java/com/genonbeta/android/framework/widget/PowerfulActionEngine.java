@@ -5,6 +5,8 @@ import android.content.Context;
 import com.genonbeta.android.framework.object.Selectable;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
@@ -14,7 +16,7 @@ public class PowerfulActionEngine<ReturningObject extends PowerfulActionEngine.P
 {
     private Context mContext;
     private EngineCallback<ReturningObject> mEngineCallback;
-    private ArrayMap<PowerfulActionEngine.Callback, PowerfulActionEngine.Holder> mActiveActionModes = new ArrayMap<>();
+    private Map<Callback, Holder> mActiveActionModes = new ArrayMap<>();
 
     public PowerfulActionEngine(Context context, EngineCallback<ReturningObject> engineCallback)
     {
@@ -54,6 +56,11 @@ public class PowerfulActionEngine<ReturningObject extends PowerfulActionEngine.P
 
             reload(callback);
         }
+    }
+
+    public Map<Callback, Holder> getActiveActionModes()
+    {
+        return mActiveActionModes;
     }
 
     public Context getContext()
@@ -116,7 +123,7 @@ public class PowerfulActionEngine<ReturningObject extends PowerfulActionEngine.P
 
     public interface Callback<T extends Selectable, ReturningObject extends PowerfulActionEngineImpl>
     {
-        ArrayList<T> getSelectableList();
+        List<T> getSelectableList();
 
         void onItemChecked(Context context, ReturningObject actionMode, T selectable, int position);
 
@@ -144,7 +151,7 @@ public class PowerfulActionEngine<ReturningObject extends PowerfulActionEngine.P
             return mMode;
         }
 
-        public ArrayList<T> getSelectedItemList()
+        public List<T> getSelectedItemList()
         {
             Holder<T> holder = getMode().getHolder(getCallback());
 
@@ -209,9 +216,9 @@ public class PowerfulActionEngine<ReturningObject extends PowerfulActionEngine.P
 
     public static class Holder<T extends Selectable>
     {
-        private final ArrayList<T> mSelectionList = new ArrayList<>();
+        private final List<T> mSelectionList = new ArrayList<>();
 
-        public ArrayList<T> getSelectionList()
+        public List<T> getSelectionList()
         {
             synchronized (mSelectionList) {
                 return mSelectionList;

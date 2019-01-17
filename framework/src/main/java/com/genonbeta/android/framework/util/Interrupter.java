@@ -1,6 +1,7 @@
 package com.genonbeta.android.framework.util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * created by: Veli
@@ -11,7 +12,7 @@ public class Interrupter
 {
 	private boolean mInterrupted = false;
 	private boolean mInterruptedByUser = false;
-	private ArrayList<Closer> mClosers = new ArrayList<>();
+	private List<Closer> mClosers = new ArrayList<>();
 
 	public boolean addCloser(Closer closer)
 	{
@@ -27,7 +28,7 @@ public class Interrupter
 		}
 	}
 
-	public ArrayList<Closer> getClosers()
+	public List<Closer> getClosers()
 	{
 		return mClosers;
 	}

@@ -1,6 +1,7 @@
 package com.genonbeta.android.framework.util.listing;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * created by: Veli
@@ -8,13 +9,13 @@ import java.util.ArrayList;
  */
 public class Lister<T, V extends Merger<T>>
 {
-	private ArrayList<V> mList = new ArrayList<>();
+	private List<V> mList = new ArrayList<>();
 
 	public Lister()
 	{
 	}
 
-	public ArrayList<V> getList()
+	public List<V> getList()
 	{
 		return mList;
 	}

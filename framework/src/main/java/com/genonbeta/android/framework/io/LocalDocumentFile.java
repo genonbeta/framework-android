@@ -7,6 +7,7 @@ import android.webkit.MimeTypeMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * created by: Veli
@@ -155,7 +156,7 @@ public class LocalDocumentFile extends DocumentFile
 	@Override
 	public DocumentFile[] listFiles()
 	{
-		final ArrayList<DocumentFile> results = new ArrayList<DocumentFile>();
+		final List<DocumentFile> results = new ArrayList<DocumentFile>();
 		final File[] files = mFile.listFiles();
 
 		if (files != null)

@@ -1,6 +1,7 @@
 package com.genonbeta.android.framework.util.listing;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * created by: Veli
@@ -8,11 +9,11 @@ import java.util.ArrayList;
  */
 abstract public class Merger<T>
 {
-	public ArrayList<T> mBelongings = new ArrayList<>();
+	public List<T> mBelongings = new ArrayList<>();
 
 	abstract public boolean equals(Object obj);
 
-	public ArrayList<T> getBelongings()
+	public List<T> getBelongings()
 	{
 		return mBelongings;
 	}

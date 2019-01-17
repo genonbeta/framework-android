@@ -84,7 +84,7 @@ public class DbSharablePreferences extends SQLiteDatabase implements SharedPrefe
 	@Override
 	public Map<String, ?> getAll()
 	{
-		ArrayList<StoredData> data = castQuery(new SQLQuery.Select(mCategory), StoredData.class);
+		List<StoredData> data = castQuery(new SQLQuery.Select(mCategory), StoredData.class);
 		Map<String, Object> output = new ArrayMap<>();
 
 		for (StoredData object : data)
@@ -354,8 +354,8 @@ public class DbSharablePreferences extends SQLiteDatabase implements SharedPrefe
 
 	public class DbEditor implements Editor
 	{
-		private ArrayList<StoredData> mPendingPublish = new ArrayList<>();
-		private ArrayList<StoredData> mPendingRemoval = new ArrayList<>();
+		private List<StoredData> mPendingPublish = new ArrayList<>();
+		private List<StoredData> mPendingRemoval = new ArrayList<>();
 
 		protected void execute()
 		{
@@ -364,8 +364,8 @@ public class DbSharablePreferences extends SQLiteDatabase implements SharedPrefe
 			if (isSyncReliant())
 				passiveSyncList.putAll(mSyncedList);
 
-			ArrayList<StoredData> pendingRemoval = new ArrayList<>(mPendingRemoval);
-			ArrayList<StoredData> pendingPublish = new ArrayList<>(mPendingPublish);
+			List<StoredData> pendingRemoval = new ArrayList<>(mPendingRemoval);
+			List<StoredData> pendingPublish = new ArrayList<>(mPendingPublish);
 
 			for (StoredData removal : pendingRemoval) {
 				DbSharablePreferences.this.remove(removal);

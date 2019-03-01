@@ -33,11 +33,11 @@ ext {
     minSdkVersion = 11
     targetSdkVersion = 28
     //versionName = "1.0.2.6-local69"
-    versionName = "1.0.2.7"
+    versionName = "1.0.2.8"
     versionCode = 6
     appCompatVersion = "1.0.2"
     cardViewVersion = "1.0.0"
-    materialVersion = "1.1.0-alpha02"
+    materialVersion = "1.1.0-alpha04"
     recyclerViewVersion = "1.0.0"
 }
 

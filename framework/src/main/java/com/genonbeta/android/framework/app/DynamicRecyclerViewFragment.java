@@ -33,39 +33,33 @@ abstract public class DynamicRecyclerViewFragment<T, V extends RecyclerViewAdapt
         return false;
     }
 
-    public boolean isScreenLowDensity()
-    {
-        return getContext() != null &&
-                getContext().getResources().getBoolean(R.bool.genfw_screen_isBelowDensity);
-    }
-
-    public boolean isScreenHighDensity()
-    {
-        return getContext() != null &&
-                getContext().getResources().getBoolean(R.bool.genfw_screen_isHighDensity);
-    }
-
-    public boolean isScreenXHighDensity()
-    {
-        return getContext() != null &&
-                getContext().getResources().getBoolean(R.bool.genfw_screen_isXHighDensity);
-    }
-
-    public boolean isScreenXXXHighDensity()
-    {
-        return getContext() != null &&
-                getContext().getResources().getBoolean(R.bool.genfw_screen_isXXXHighDensity);
-    }
-
     public boolean isScreenLandscape()
     {
         return getContext() != null &&
                 getContext().getResources().getBoolean(R.bool.genfw_screen_isLandscape);
     }
 
+    public boolean isScreenSmall()
+    {
+        return getContext() != null &&
+                getContext().getResources().getBoolean(R.bool.genfw_screen_isSmall);
+    }
+
+    public boolean isScreenNormal()
+    {
+        return getContext() != null &&
+                getContext().getResources().getBoolean(R.bool.genfw_screen_isNormal);
+    }
+
     public boolean isScreenLarge()
     {
         return getContext() != null &&
                 getContext().getResources().getBoolean(R.bool.genfw_screen_isLarge);
+    }
+
+    public boolean isXScreenLarge()
+    {
+        return getContext() != null &&
+                getContext().getResources().getBoolean(R.bool.genfw_screen_isXLarge);
     }
 }

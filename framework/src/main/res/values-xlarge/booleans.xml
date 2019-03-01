@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <bool name="genfw_screen_isXXXHighDensity">true</bool>
+    <bool name="genfw_screen_isXLarge">true</bool>
 </resources>

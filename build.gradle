@@ -33,7 +33,7 @@ ext {
     minSdkVersion = 11
     targetSdkVersion = 28
     //versionName = "1.0.2.6-local69"
-    versionName = "1.0.2.6"
+    versionName = "1.0.2.7"
     versionCode = 6
     appCompatVersion = "1.0.2"
     cardViewVersion = "1.0.0"

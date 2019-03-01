@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <bool name="genfw_screen_isBelowDensity">true</bool>
+    <bool name="genfw_screen_isHighDensity">false</bool>
+    <bool name="genfw_screen_isXHighDensity">false</bool>
+    <bool name="genfw_screen_isXXXHighDensity">false</bool>
     <bool name="genfw_screen_isLarge">false</bool>
     <bool name="genfw_screen_isLandscape">false</bool>
 </resources>

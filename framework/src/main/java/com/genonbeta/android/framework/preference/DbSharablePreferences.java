@@ -8,7 +8,6 @@ import androidx.collection.ArrayMap;
 
 import android.util.Log;
 
-import com.genonbeta.android.database.CursorItem;
 import com.genonbeta.android.database.DatabaseObject;
 import com.genonbeta.android.database.SQLQuery;
 import com.genonbeta.android.database.SQLType;
@@ -317,11 +316,11 @@ public class DbSharablePreferences extends SQLiteDatabase implements SharedPrefe
 		}
 
 		@Override
-		public void reconstruct(CursorItem item)
+		public void reconstruct(ContentValues item)
 		{
-			mKey = item.getString(FIELD_KEY);
-			mValue = item.getString(FIELD_VALUE);
-			mType = Type.valueOf(item.getString(FIELD_TYPE));
+			mKey = item.getAsString(FIELD_KEY);
+			mValue = item.getAsString(FIELD_VALUE);
+			mType = Type.valueOf(item.getAsString(FIELD_TYPE));
 		}
 
 		@Override

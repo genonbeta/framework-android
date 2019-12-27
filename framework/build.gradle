@@ -61,16 +61,15 @@ ext {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation "androidx.appcompat:appcompat:${rootProject.appCompatVersion}"
     implementation "androidx.cardview:cardview:${rootProject.cardViewVersion}"
     implementation "com.google.android.material:material:${rootProject.materialVersion}"
     implementation "androidx.recyclerview:recyclerview:${rootProject.recyclerViewVersion}"
 
-    implementation 'com.genonbeta.android:gdatabase:1.0.2.6.1'
-
+    implementation "com.genonbeta.android:gdatabase:1.0.3.1"
     implementation "com.github.kevinsawicki:http-request:6.0"
 }
 

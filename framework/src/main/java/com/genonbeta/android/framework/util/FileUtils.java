@@ -34,8 +34,8 @@ public class FileUtils
 {
     public static final String TAG = FileUtils.class.getSimpleName();
 
-    public static void copy(Context context, DocumentFile source, DocumentFile destination,
-                            Interrupter interrupter, int bufferLength, int socketTimeout) throws Exception
+    public static void copy(Context context, DocumentFile source, DocumentFile destination, Interrupter interrupter,
+                            int bufferLength, int socketTimeout) throws Exception
     {
         ContentResolver resolver = context.getContentResolver();
 
@@ -70,7 +70,8 @@ public class FileUtils
         return fetchDirectories(directoryFile, path, true);
     }
 
-    public static DocumentFile fetchDirectories(DocumentFile directoryFile, String path, boolean createIfNotExists) throws IOException
+    public static DocumentFile fetchDirectories(DocumentFile directoryFile, String path, boolean createIfNotExists)
+            throws IOException
     {
         DocumentFile currentDirectory = directoryFile;
         String[] pathArray = path.split(File.separator);
@@ -97,9 +98,11 @@ public class FileUtils
         return fetchFile(directoryFile, path, displayName, true);
     }
 
-    public static DocumentFile fetchFile(DocumentFile directoryFile, String path, String displayName, boolean createIfNotExists) throws IOException
+    public static DocumentFile fetchFile(DocumentFile directoryFile, String path, String displayName,
+                                         boolean createIfNotExists) throws IOException
     {
-        DocumentFile documentFile = path == null ? directoryFile : fetchDirectories(directoryFile, path, createIfNotExists);
+        DocumentFile documentFile = path == null ? directoryFile : fetchDirectories(directoryFile, path,
+                createIfNotExists);
 
         if (documentFile != null) {
             DocumentFile existingOne = documentFile.findFile(displayName);
@@ -166,8 +169,7 @@ public class FileUtils
 
     public static Intent getOpenIntent(Context context, DocumentFile file)
     {
-        if (Build.VERSION.SDK_INT >= 24
-                || (Build.VERSION.SDK_INT == 23 && !Intent.ACTION_INSTALL_PACKAGE
+        if (Build.VERSION.SDK_INT >= 24 || (Build.VERSION.SDK_INT == 23 && !Intent.ACTION_INSTALL_PACKAGE
                 .equals(geActionTypeToView(file.getType())))) {
             return getOpenIntent(FileUtils.getSecureUriSilently(context, file), file.getType())
                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -201,10 +203,8 @@ public class FileUtils
             return getSecureUri(context, documentFile);
         } catch (Throwable e) {
             // do nothing
-            Log.d(TAG, String.format(Locale.US,
-                    "Cannot create secure uri for the file %s with error message '%s'",
-                    documentFile.getName(),
-                    e.getMessage()));
+            Log.d(TAG, String.format(Locale.US, "Cannot create secure uri for the file %s with error message '%s'",
+                    documentFile.getName(), e.getMessage()));
         }
 
         return documentFile.getUri();
@@ -212,14 +212,14 @@ public class FileUtils
 
     public static Uri getSecureUri(Context context, StreamInfo streamInfo)
     {
-        return StreamInfo.Type.File.equals(streamInfo.type)
-                ? getSelfProviderFile(context, streamInfo.file)
+        return StreamInfo.Type.File.equals(streamInfo.type) ? getSelfProviderFile(context, streamInfo.file)
                 : streamInfo.uri;
     }
 
     public static Uri getSelfProviderFile(Context context, File file)
     {
-        return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".fileprovider", file);
+        return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName()
+                + ".fileprovider", file);
     }
 
     public static String getUniqueFileName(DocumentFile documentFolder, String fileName, boolean tryActualFile)
@@ -232,8 +232,7 @@ public class FileUtils
         String mergedName = pathStartPosition != -1 ? fileName.substring(0, pathStartPosition) : fileName;
         String fileExtension = pathStartPosition != -1 ? fileName.substring(pathStartPosition) : "";
 
-        if (mergedName.length() == 0
-                && fileExtension.length() > 0) {
+        if (mergedName.length() == 0 && fileExtension.length() > 0) {
             mergedName = fileExtension;
             fileExtension = "";
         }
@@ -251,8 +250,7 @@ public class FileUtils
     public static boolean move(Context context, DocumentFile targetFile, DocumentFile destinationFile,
                                Interrupter interrupter, int bufferLength, int socketTimeout) throws Exception
     {
-        if (!(targetFile instanceof LocalDocumentFile)
-                || !(destinationFile instanceof LocalDocumentFile)
+        if (!(targetFile instanceof LocalDocumentFile) || !(destinationFile instanceof LocalDocumentFile)
                 || !((LocalDocumentFile) targetFile).getFile().renameTo(((LocalDocumentFile) destinationFile).getFile()))
             copy(context, targetFile, destinationFile, interrupter, bufferLength, socketTimeout);
 
@@ -267,11 +265,13 @@ public class FileUtils
         return false;
     }
 
-    public static boolean openUri(Context context, DocumentFile file) {
+    public static boolean openUri(Context context, DocumentFile file)
+    {
         return openUri(context, getOpenIntent(context, file));
     }
 
-    public static boolean openUri(Context context, Uri uri) {
+    public static boolean openUri(Context context, Uri uri)
+    {
         return openUri(context, getOpenIntent(uri, context.getContentResolver().getType(uri)));
     }
 
@@ -281,9 +281,7 @@ public class FileUtils
             context.startActivity(intent);
             return true;
         } catch (Throwable e) {
-            Log.d(TAG, String.format(Locale.US,
-                    "Open uri request failed with error message '%s'",
-                    e.getMessage()));
+            Log.d(TAG, String.format(Locale.US, "Open uri request failed with error message '%s'", e.getMessage()));
         }
 
         return false;

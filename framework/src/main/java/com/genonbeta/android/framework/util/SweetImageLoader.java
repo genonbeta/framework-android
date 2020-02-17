@@ -66,7 +66,8 @@ public class SweetImageLoader<Object, ImageType> extends AsyncTask<Object, Void,
 				else if (image instanceof Drawable)
 					imageView.setImageDrawable((Drawable) image);
 				else
-					throw new UnsupportedOperationException("Class for loading is not supported: " + image.getClass().getName());
+					throw new UnsupportedOperationException("Class for loading is not supported: " + image.getClass()
+							.getName());
 			}
 		}
 	}

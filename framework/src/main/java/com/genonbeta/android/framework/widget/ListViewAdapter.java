@@ -28,9 +28,7 @@ import com.genonbeta.android.framework.widget.ListAdapterImpl;
  * Date: 12/4/16 11:54 PM
  */
 
-abstract public class ListViewAdapter<T>
-		extends android.widget.BaseAdapter
-		implements ListAdapterImpl<T>
+abstract public class ListViewAdapter<T> extends android.widget.BaseAdapter implements ListAdapterImpl<T>
 {
 	public Context mContext;
 	private LayoutInflater mInflater;

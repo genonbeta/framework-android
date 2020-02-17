@@ -16,5 +16,6 @@
   ~ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.genonbeta.android.framework"/>
+<manifest package="com.genonbeta.android.framework">
+    <application/>
+</manifest>

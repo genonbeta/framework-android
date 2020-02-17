@@ -137,8 +137,7 @@ public class FileUtils
 
     public static String geActionTypeToView(String type)
     {
-        if ("application/vnd.android.package-archive".equals(type)
-                && Build.VERSION.SDK_INT >= 14)
+        if ("application/vnd.android.package-archive".equals(type) && Build.VERSION.SDK_INT >= 14)
             return Intent.ACTION_INSTALL_PACKAGE;
 
         return Intent.ACTION_VIEW;

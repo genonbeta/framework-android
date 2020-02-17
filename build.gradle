@@ -39,7 +39,3 @@ ext {
     materialVersion = "1.1.0"
     recyclerViewVersion = "1.0.0"
 }
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}

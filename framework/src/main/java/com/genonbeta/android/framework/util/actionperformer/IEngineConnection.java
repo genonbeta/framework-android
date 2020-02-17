@@ -23,13 +23,32 @@ import com.genonbeta.android.framework.object.Selectable;
 
 import java.util.List;
 
+/**
+ * This class takes care of connecting {@link IPerformerEngine} to the UI element that needs to be free of limitations
+ * like knowing whether the {@link T} is something that it can work on. It does that by extending from
+ * {@link IBaseEngineConnection} and allowing the UI element only worrying about whether it
+ *
+ * @param <T> The derivative of the {@link Selectable} class
+ */
 public interface IEngineConnection<T extends Selectable> extends IBaseEngineConnection
 {
+    /**
+     * @return the engine we are operating on
+     */
     IPerformerEngine getEngine();
 
+    /**
+     * @return a quick call of {@link SelectableHost#getSelectableList()}
+     * @see #getSelectableHost()
+     */
     List<T> getHostList();
 
+    /**
+     * @return a quick call of {@link SelectableProvider#getSelectableList()}
+     * @see #getSelectableProvider()
+     */
     List<T> getSelectionList();
+
 
     SelectableHost<T> getSelectableHost();
 

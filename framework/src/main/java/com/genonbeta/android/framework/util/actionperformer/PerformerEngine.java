@@ -28,7 +28,7 @@ public class PerformerEngine implements IPerformerEngine
     final private List<IBaseEngineConnection> mConnectionList = new ArrayList<>();
     final private List<PerformerListener> mPerformerListenerList = new ArrayList<>();
 
-    public <T extends Selectable> boolean check(EngineConnection<T> engineConnection, T selectable, boolean isSelected,
+    public <T extends Selectable> boolean check(IEngineConnection<T> engineConnection, T selectable, boolean isSelected,
                                                 int position)
     {
         synchronized (mPerformerListenerList) {

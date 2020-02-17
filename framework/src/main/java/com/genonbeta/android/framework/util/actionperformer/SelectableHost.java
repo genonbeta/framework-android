@@ -22,7 +22,16 @@ import com.genonbeta.android.framework.object.Selectable;
 
 import java.util.List;
 
+/**
+ * The idea here is that, by separating the selected items' holder from the {@link IEngineConnection} class, we can
+ * store and restore list in the case of the items dying and restored.
+ *
+ * @param <T> The derivate of the {@link Selectable} class
+ */
 public interface SelectableHost<T extends Selectable>
 {
+    /**
+     * @return the items marked as selected
+     */
     List<T> getSelectableList();
 }

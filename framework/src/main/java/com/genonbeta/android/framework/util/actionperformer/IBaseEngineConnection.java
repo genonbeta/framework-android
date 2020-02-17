@@ -25,4 +25,6 @@ import java.util.List;
 public interface IBaseEngineConnection
 {
     List<Selectable> getSelectableList();
+
+    CharSequence getDefinitiveTitle();
 }

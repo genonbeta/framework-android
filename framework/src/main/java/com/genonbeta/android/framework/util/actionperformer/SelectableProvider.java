@@ -22,6 +22,13 @@ import com.genonbeta.android.framework.object.Selectable;
 
 import java.util.List;
 
+/**
+ * In order to not limit the list of items that can be provided by the list container to the {@link EngineConnection},
+ * this class is expected to be given to it when the selection process is made with a list position like
+ * using the {@link EngineConnection#setSelected(int)} method.
+ *
+ * @param <T> a derivative of {@link Selectable}
+ */
 public interface SelectableProvider<T extends Selectable>
 {
     List<T> getSelectableList();

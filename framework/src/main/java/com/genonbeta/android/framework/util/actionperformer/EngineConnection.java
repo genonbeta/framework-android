@@ -30,21 +30,24 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
     private IPerformerEngine mEngine;
     private SelectableProvider<T> mSelectableProvider;
     private SelectableHost<T> mSelectableHost;
+    private CharSequence mDefinitiveTitle;
 
-    public EngineConnection()
-    {
-        this(null);
-    }
-
-    public EngineConnection(IPerformerEngine engine)
+    public EngineConnection(IPerformerEngine engine, CharSequence title)
     {
         setEngine(engine);
+        setDefinitiveTitle(title);
     }
 
     protected boolean changeSelectionState(T selectable, boolean selected)
     {
         return selectable.setSelectableSelected(selected) && (selected && getHostList().add(selectable))
                 || (!selected && getHostList().remove(selectable));
+    }
+
+    @Override
+    public CharSequence getDefinitiveTitle()
+    {
+        return mDefinitiveTitle;
     }
 
     @Nullable
@@ -59,11 +62,13 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
         return new ArrayList<Selectable>(getSelectionList());
     }
 
-    public List<T> getHostList() {
+    public List<T> getHostList()
+    {
         return getSelectableHost().getSelectableList();
     }
 
-    public List<T> getSelectionList() {
+    public List<T> getSelectionList()
+    {
         return getSelectableProvider().getSelectableList();
     }
 
@@ -82,13 +87,19 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
         return getSelectionList().contains(selectable);
     }
 
+    public void setDefinitiveTitle(CharSequence title)
+    {
+        mDefinitiveTitle = title;
+    }
+
     public void setEngine(IPerformerEngine engine)
     {
         engine.ensureSlot(this);
         mEngine = engine;
     }
 
-    public void setSelectableHost(SelectableHost<T> host) {
+    public void setSelectableHost(SelectableHost<T> host)
+    {
         mSelectableHost = host;
     }
 
@@ -128,7 +139,7 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
         if (selected == isSelected(selectable))
             return selected;
 
-        return getEngine() != null && changeSelectionState(selectable, selected)
-                && getEngine().check(this, selectable, selected, position);
+        return getEngine() != null && getEngine().check(this, selectable, selected, position)
+                && changeSelectionState(selectable, selected);
     }
 }

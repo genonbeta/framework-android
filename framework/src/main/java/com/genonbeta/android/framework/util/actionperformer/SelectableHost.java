@@ -24,9 +24,9 @@ import java.util.List;
 
 /**
  * The idea here is that, by separating the selected items' holder from the {@link IEngineConnection} class, we can
- * store and restore list in the case of the items dying and restored.
+ * store and restore list in the case of the items being deleted.
  *
- * @param <T> The derivate of the {@link Selectable} class
+ * @param <T> The derivative of the {@link Selectable} class
  */
 public interface SelectableHost<T extends Selectable>
 {

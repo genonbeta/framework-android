@@ -18,6 +18,7 @@
 
 package com.genonbeta.android.framework.util.actionperformer;
 
+import androidx.recyclerview.widget.RecyclerView;
 import com.genonbeta.android.framework.object.Selectable;
 
 /**
@@ -54,10 +55,11 @@ public interface IPerformerEngine
      * {@link PerformerListener} classes.
      *
      * @param engineConnection {@link IEngineConnection} that is making the call
-     * @param selectable {@link Selectable} item that is being updated
-     * @param isSelected true when {@link Selectable} is being marked as selected.
-     * @param position the position of the {@link Selectable} in the list which is -1 if it is not known.
-     * @param <T>
+     * @param selectable       {@link Selectable} item that is being updated
+     * @param isSelected       true when {@link Selectable} is being marked as selected.
+     * @param position         the position of the {@link Selectable} in the list which should be
+     *                         {@link RecyclerView#NO_POSITION} if it is not known.
+     * @param <T>              type of selectable expected to be received and used over {@link IEngineConnection}
      */
     <T extends Selectable> boolean check(IEngineConnection<T> engineConnection, T selectable, boolean isSelected,
                                          int position);

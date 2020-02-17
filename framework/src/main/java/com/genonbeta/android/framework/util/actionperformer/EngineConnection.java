@@ -84,7 +84,7 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
 
     public boolean isSelected(T selectable)
     {
-        return getSelectionList().contains(selectable);
+        return getHostList().contains(selectable);
     }
 
     public void setDefinitiveTitle(CharSequence title)
@@ -125,7 +125,7 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
 
     public boolean setSelected(T selectable, boolean selected)
     {
-        return setSelected(selectable, selected, -1);
+        return setSelected(selectable, selected, RecyclerView.NO_POSITION);
     }
 
     public boolean setSelected(T selectable, int position)

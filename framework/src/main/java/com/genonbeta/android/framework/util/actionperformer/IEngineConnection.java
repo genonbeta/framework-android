@@ -65,7 +65,7 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
     /**
      * Ensure that the given selectable object is stored in {@link SelectableHost}
      *
-     * @param selectable that needs to be checked whetheer it is stored
+     * @param selectable that needs to be checked whether it is stored
      * @return true when it exists in the host's list
      */
     boolean isSelected(T selectable);

@@ -29,8 +29,8 @@ import androidx.recyclerview.widget.RecyclerView;
  * date: 28.03.2018 09:42
  */
 
-abstract public class DynamicRecyclerViewFragment<T, V extends RecyclerViewAdapter.ViewHolder, Z extends RecyclerViewAdapter<T, V>>
-        extends RecyclerViewFragment<T, V, Z>
+abstract public class DynamicRecyclerViewFragment<T, V extends RecyclerViewAdapter.ViewHolder,
+        Z extends RecyclerViewAdapter<T, V>> extends RecyclerViewFragment<T, V, Z>
 {
     @Override
     public RecyclerView.LayoutManager onLayoutManager()

@@ -28,20 +28,25 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import com.genonbeta.android.framework.object.Selectable;
 import com.genonbeta.android.framework.util.actionperformer.IBaseEngineConnection;
+import com.genonbeta.android.framework.util.actionperformer.IEngineConnection;
 import com.genonbeta.android.framework.util.actionperformer.IPerformerEngine;
 import com.genonbeta.android.framework.util.actionperformer.PerformerListener;
 
+/**
+ * The idea here is that this class bridges one or more menus with a {@link IEngineConnection} to perform a specific
+ * task whenever a new selectable is adder or removed and whenever the any item on a menu is clicked.
+ */
 abstract public class ActionPerformerMenu implements PerformerListener, MenuItem.OnMenuItemClickListener
 {
     private Context mContext;
     private MenuInflater mMenuInflater;
-    private OnMenuItemClickListener mOnMenuItemClickListener;
+    private Callback mCallback;
 
-    public ActionPerformerMenu(Context context, @NonNull OnMenuItemClickListener menuItemClickListener)
+    public ActionPerformerMenu(Context context, @NonNull Callback callback)
     {
         mContext = context;
         mMenuInflater = new MenuInflater(getContext());
-        mOnMenuItemClickListener = menuItemClickListener;
+        mCallback = callback;
     }
 
     public Context getContext()
@@ -54,7 +59,7 @@ abstract public class ActionPerformerMenu implements PerformerListener, MenuItem
         return mMenuInflater;
     }
 
-    public void start(Menu targetMenu, @MenuRes int loadedMenuRes)
+    public void load(Menu targetMenu, @MenuRes int loadedMenuRes)
     {
         targetMenu.clear();
         getMenuInflater().inflate(loadedMenuRes, targetMenu);
@@ -67,17 +72,21 @@ abstract public class ActionPerformerMenu implements PerformerListener, MenuItem
     public boolean onSelection(IPerformerEngine engine, IBaseEngineConnection owner, Selectable selectable,
                             boolean isSelected, int position)
     {
-        return true;
+        return mCallback.onActionPerformerSelection(this, engine, owner, selectable, isSelected, position);
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item)
     {
-        return mOnMenuItemClickListener.onActionPerformerClick(item);
+        return mCallback.onActionPerformerClick(this, item);
     }
 
-    interface OnMenuItemClickListener
+    interface Callback
     {
-        boolean onActionPerformerClick(MenuItem item);
+        boolean onActionPerformerClick(ActionPerformerMenu performerMenu, MenuItem item);
+
+        boolean onActionPerformerSelection(ActionPerformerMenu performerMenu, IPerformerEngine engine,
+                                           IBaseEngineConnection owner, Selectable selectable, boolean isSelected,
+                                           int position);
     }
 }

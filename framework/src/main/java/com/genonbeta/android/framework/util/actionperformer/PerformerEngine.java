@@ -33,7 +33,8 @@ public class PerformerEngine implements IPerformerEngine
     {
         synchronized (mPerformerListenerList) {
             for (PerformerListener listener : mPerformerListenerList)
-                listener.onSelection(this, engineConnection, selectable, isSelected, position);
+                if (!listener.onSelection(this, engineConnection, selectable, isSelected, position))
+                    return false;
         }
 
         return true;

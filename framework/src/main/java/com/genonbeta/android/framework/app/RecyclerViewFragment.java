@@ -37,8 +37,8 @@ import androidx.recyclerview.widget.RecyclerView;
  * date: 26.03.2018 11:45
  */
 
-abstract public class RecyclerViewFragment<T, V extends RecyclerViewAdapter.ViewHolder, E extends RecyclerViewAdapter<T, V>>
-		extends ListFragment<RecyclerView, T, E>
+abstract public class RecyclerViewFragment<T, V extends RecyclerViewAdapter.ViewHolder,
+		E extends RecyclerViewAdapter<T, V>> extends ListFragment<RecyclerView, T, E>
 {
 	private RecyclerView mRecyclerView;
 

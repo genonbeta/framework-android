@@ -18,13 +18,14 @@
 
 package com.genonbeta.android.framework.util.actionperformer;
 
-import com.genonbeta.android.framework.object.Selectable;
-
-import java.util.List;
-
-public interface IBaseEngineConnection
+/**
+ * Any object implementing this should provide an instance of {@link IPerformerEngine} so that {@link IEngineConnection}
+ * objects can connect it.
+ */
+public interface PerformerEngineProvider
 {
-    List<? extends Selectable> getSelectableList();
-
-    CharSequence getDefinitiveTitle();
+    /**
+     * @return the engine
+     */
+    IPerformerEngine getPerformerEngine();
 }

@@ -41,6 +41,19 @@ public class PerformerEngine implements IPerformerEngine
     }
 
     @Override
+    public List<? extends Selectable> getSelectionList()
+    {
+        List<Selectable> selectableList = new ArrayList<>();
+
+        synchronized (mConnectionList) {
+            for (IBaseEngineConnection baseEngineConnection : mConnectionList)
+                selectableList.addAll(baseEngineConnection.getSelectableList());
+        }
+
+        return selectableList;
+    }
+
+    @Override
     public boolean ensureSlot(IBaseEngineConnection selectionConnection)
     {
         synchronized (mConnectionList) {

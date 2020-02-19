@@ -57,9 +57,9 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
     }
 
     @Override
-    public List<Selectable> getSelectableList()
+    public List<? extends Selectable> getSelectableList()
     {
-        return new ArrayList<Selectable>(getSelectionList());
+        return getSelectionList();
     }
 
     public List<T> getHostList()

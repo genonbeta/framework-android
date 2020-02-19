@@ -21,6 +21,8 @@ package com.genonbeta.android.framework.util.actionperformer;
 import androidx.recyclerview.widget.RecyclerView;
 import com.genonbeta.android.framework.object.Selectable;
 
+import java.util.List;
+
 /**
  * A UI-related class that handles {@link IEngineConnection} and {@link PerformerListener} to help them communicate with
  * the UI and each other.
@@ -63,4 +65,12 @@ public interface IPerformerEngine
      */
     <T extends Selectable> boolean check(IEngineConnection<T> engineConnection, T selectable, boolean isSelected,
                                          int position);
+
+    /**
+     * Compile the list of selectables that are held in the host of their respective owners in other words, make
+     * a list of selectables that are marked as selected.
+     *
+     * @return the compiled list
+     */
+    List<? extends Selectable> getSelectionList();
 }

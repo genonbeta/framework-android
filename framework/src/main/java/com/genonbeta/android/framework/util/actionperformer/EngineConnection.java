@@ -120,7 +120,7 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
 
     public boolean setSelected(T selectable)
     {
-        return setSelected(selectable, !isSelected(selectable), -1);
+        return setSelected(selectable, !isSelected(selectable));
     }
 
     public boolean setSelected(T selectable, boolean selected)

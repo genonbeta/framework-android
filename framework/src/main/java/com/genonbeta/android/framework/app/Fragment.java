@@ -29,7 +29,6 @@ import com.google.android.material.snackbar.Snackbar;
  */
 public class Fragment extends androidx.fragment.app.Fragment implements FragmentImpl
 {
-	private boolean mIsMenuShown;
 	private View mSnackbarContainer;
 	private int mSnackbarLength = Snackbar.LENGTH_LONG;
 
@@ -37,18 +36,6 @@ public class Fragment extends androidx.fragment.app.Fragment implements Fragment
 	{
 		View drawOverView = mSnackbarContainer == null ? getView() : mSnackbarContainer;
 		return drawOverView != null ? Snackbar.make(drawOverView, getString(resId, objects), mSnackbarLength) : null;
-	}
-
-	public boolean isMenuShown()
-	{
-		return mIsMenuShown;
-	}
-
-	@Override
-	public void setMenuVisibility(boolean menuVisible)
-	{
-		super.setMenuVisibility(menuVisible);
-		mIsMenuShown = menuVisible;
 	}
 
 	public void setSnackbarLength(int length)

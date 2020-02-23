@@ -76,17 +76,19 @@ abstract public class RecyclerViewAdapter<T, V extends RecyclerViewAdapter.ViewH
 
 	public static class ViewHolder extends RecyclerView.ViewHolder
 	{
-		private View mView;
-
 		public ViewHolder(View itemView)
 		{
 			super(itemView);
-			mView = itemView;
 		}
 
-		public View getView()
+		boolean isSelected()
 		{
-			return mView;
+			return itemView.isSelected();
+		}
+
+		void setSelected(boolean selected)
+		{
+			itemView.setSelected(selected);
 		}
 	}
 

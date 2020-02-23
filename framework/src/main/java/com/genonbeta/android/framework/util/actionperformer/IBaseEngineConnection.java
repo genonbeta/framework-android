@@ -29,11 +29,18 @@ import java.util.List;
 public interface IBaseEngineConnection
 {
     /**
-     * This is intended to be free of generics. The previously available list can be passed into this.
+     * Compile the list of available items
+     *
+     * @return the list that is available with {@link SelectableProvider}
+     */
+    List<? extends Selectable> getGenericAvailableList();
+
+    /**
+     * Compile the list of selected items.
      *
      * @return the list that is available with {@link SelectableHost}
      */
-    List<? extends Selectable> getSelectableList();
+    List<? extends Selectable> getGenericSelectedItemList();
 
     /**
      * Titles are only for helping the end-user know the connection in a UX manner.

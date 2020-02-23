@@ -47,7 +47,7 @@ public class PerformerEngine implements IPerformerEngine
 
         synchronized (mConnectionList) {
             for (IBaseEngineConnection baseEngineConnection : mConnectionList)
-                selectableList.addAll(baseEngineConnection.getSelectableList());
+                selectableList.addAll(baseEngineConnection.getGenericAvailableList());
         }
 
         return selectableList;

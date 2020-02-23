@@ -20,7 +20,6 @@ package com.genonbeta.android.framework.util.actionperformer;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 import com.genonbeta.android.framework.object.Selectable;
 
 import java.util.List;
@@ -38,15 +37,12 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
     {
         setEngineProvider(provider);
         setSelectableHost(host);
-
-        if (provider == null || host == null)
-            throw new NullPointerException("Provider or host cannot be null.");
     }
 
     protected boolean changeSelectionState(T selectable, boolean selected)
     {
-        return selectable.setSelectableSelected(selected) && (selected && getHostList().add(selectable))
-                || (!selected && getHostList().remove(selectable));
+        return selectable.setSelectableSelected(selected) && (selected && getSelectedItemList().add(selectable))
+                || (!selected && getSelectedItemList().remove(selectable));
     }
 
     @Override
@@ -63,19 +59,25 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
     }
 
     @Override
-    public List<? extends Selectable> getSelectableList()
+    public List<? extends Selectable> getGenericSelectedItemList()
     {
-        return getSelectionList();
+        return getSelectedItemList();
     }
 
     @Override
-    public List<T> getHostList()
+    public List<? extends Selectable> getGenericAvailableList()
+    {
+        return getAvailableList();
+    }
+
+    @Override
+    public List<T> getSelectedItemList()
     {
         return getSelectableHost().getSelectableList();
     }
 
     @Override
-    public List<T> getSelectionList()
+    public List<T> getAvailableList()
     {
         return getSelectableProvider().getSelectableList();
     }
@@ -95,7 +97,7 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
     @Override
     public boolean isSelectedOnHost(T selectable)
     {
-        return getHostList().contains(selectable);
+        return getSelectedItemList().contains(selectable);
     }
 
     @Override
@@ -175,7 +177,7 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
         if (!checked && selected == isSelectedOnHost(selectable)) {
             if (selectable.isSelectableSelected() != selected && !selectable.setSelectableSelected(selected)) {
                 // Selectable was known as selected, but not selected and failed to change the state
-                getHostList().remove(selectable);
+                getSelectedItemList().remove(selectable);
                 return false;
             }
 

@@ -34,7 +34,7 @@ import com.genonbeta.android.framework.util.actionperformer.PerformerListener;
  * The idea here is that this class bridges one or more menus with a {@link IEngineConnection} to perform a specific
  * task whenever a new selectable is adder or removed and whenever the any item on a menu is clicked.
  */
-abstract public class ActionPerformerMenu implements PerformerListener, MenuItem.OnMenuItemClickListener
+public class ActionPerformerMenu implements PerformerListener, MenuItem.OnMenuItemClickListener
 {
     private Context mContext;
     private MenuInflater mMenuInflater;
@@ -57,13 +57,17 @@ abstract public class ActionPerformerMenu implements PerformerListener, MenuItem
         return mMenuInflater;
     }
 
-    public void load(Menu targetMenu, @MenuRes int loadedMenuRes)
+    public boolean load(Menu targetMenu)
     {
         targetMenu.clear();
-        getMenuInflater().inflate(loadedMenuRes, targetMenu);
+
+        if (mCallback.onActionPerformerMenuList(this, this.getMenuInflater(), targetMenu))
+            return false;
 
         for (int i = 0; i < targetMenu.size(); i++)
             targetMenu.getItem(i).setOnMenuItemClickListener(this);
+
+        return true;
     }
 
     @Override
@@ -79,8 +83,10 @@ abstract public class ActionPerformerMenu implements PerformerListener, MenuItem
         return mCallback.onActionPerformerClick(this, item);
     }
 
-    interface Callback
+    public interface Callback
     {
+        boolean onActionPerformerMenuList(ActionPerformerMenu performerMenu, MenuInflater inflater, Menu targetMenu);
+
         boolean onActionPerformerClick(ActionPerformerMenu performerMenu, MenuItem item);
 
         boolean onActionPerformerSelection(ActionPerformerMenu performerMenu, IPerformerEngine engine,

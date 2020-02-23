@@ -37,13 +37,13 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
      * @return a quick call of {@link SelectableHost#getSelectableList()}
      * @see #getSelectableHost()
      */
-    List<T> getHostList();
+    List<T> getSelectedItemList();
 
     /**
      * @return a quick call of {@link SelectableProvider#getSelectableList()}
      * @see #getSelectableProvider()
      */
-    List<T> getSelectionList();
+    List<T> getAvailableList();
 
     /**
      * @return the host that holds the selected objects
@@ -87,7 +87,7 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
     boolean setSelected(RecyclerView.ViewHolder holder) throws SelectableNotFoundException, CouldNotAlterException;
 
     /**
-     * Find the selectable in {@link #getSelectionList()}
+     * Find the selectable in {@link #getAvailableList()}
      *
      * @throws SelectableNotFoundException when the the given position doesn't point to a selectable
      * @throws CouldNotAlterException      when the call fails to complete for some reason (see error msg for details)
@@ -96,7 +96,7 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
     boolean setSelected(int position) throws SelectableNotFoundException, CouldNotAlterException;
 
     /**
-     * Alter the state of the selectable without specifying its location in {@link #getSelectionList()}. Even
+     * Alter the state of the selectable without specifying its location in {@link #getAvailableList()}. Even
      * though it shouldn't be important to have the position, it may later be required to be used with
      * {@link IPerformerEngine#check(IEngineConnection, Selectable, boolean, int)}. Also because the new state is not
      * specified, it will be the opposite what it previously was.
@@ -133,7 +133,7 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
      * The return reflects if the call is successful, not the selection state.
      *
      * @param selectable to be altered
-     * @param position   where the selectable is located in {@link #getSelectionList()} which can also be
+     * @param position   where the selectable is located in {@link #getAvailableList()} which can also be
      *                   {@link RecyclerView#NO_POSITION} if it is not known
      * @param selected   is the new state
      * @return true if the new state is applied or was already the same

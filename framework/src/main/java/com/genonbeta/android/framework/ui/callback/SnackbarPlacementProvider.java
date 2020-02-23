@@ -24,7 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
  * created by: veli
  * date: 15/04/18 18:45
  */
-public interface SnackbarSupport
+public interface SnackbarPlacementProvider
 {
 	Snackbar createSnackbar(int resId, Object... objects);
 }

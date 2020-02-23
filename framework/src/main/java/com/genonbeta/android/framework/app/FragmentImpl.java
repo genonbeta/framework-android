@@ -20,8 +20,7 @@ package com.genonbeta.android.framework.app;
 
 import android.content.Context;
 
-import com.genonbeta.android.framework.ui.callback.SnackbarSupport;
-import com.google.android.material.snackbar.Snackbar;
+import com.genonbeta.android.framework.ui.callback.SnackbarPlacementProvider;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -29,7 +28,7 @@ import androidx.fragment.app.FragmentActivity;
  * created by: veli
  * date: 7/31/18 12:56 PM
  */
-public interface FragmentImpl extends SnackbarSupport
+public interface FragmentImpl extends SnackbarPlacementProvider
 {
     FragmentActivity getActivity();
 

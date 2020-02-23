@@ -28,17 +28,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
-
 import com.genonbeta.android.framework.R;
 import com.genonbeta.android.framework.widget.ListAdapterImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,8 +94,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
     {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getListView() != null
-                && getListView().getId() != R.id.genfw_customListFragment_listView)
+        if (getListView() != null && getListView().getId() != R.id.genfw_customListFragment_listView)
             getListView().setId(R.id.genfw_customListFragment_listView);
     }
 
@@ -108,8 +104,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         super.onActivityCreated(savedInstanceState);
 
         setListAdapter(mAdapter);
-        LoaderManager.getInstance(this)
-                .initLoader(TASK_ID_REFRESH, null, mLoaderCallbackRefresh);
+        LoaderManager.getInstance(this).initLoader(TASK_ID_REFRESH, null, mLoaderCallbackRefresh);
     }
 
     public abstract E onAdapter();
@@ -124,7 +119,6 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
 
     protected void onPrepareRefreshingList()
     {
-
     }
 
     protected void onListRefreshed()
@@ -301,7 +295,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         }
 
         @Override
-        public void onLoadFinished(Loader<List<T>> loader, List<T> data)
+        public void onLoadFinished(@NonNull Loader<List<T>> loader, List<T> data)
         {
             if (isResumed()) {
                 onPrepareRefreshingList();

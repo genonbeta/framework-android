@@ -20,7 +20,6 @@ package com.genonbeta.android.framework.app;
 
 import android.view.View;
 
-import com.genonbeta.android.framework.ui.callback.SnackbarSupport;
 import com.google.android.material.snackbar.Snackbar;
 
 /**

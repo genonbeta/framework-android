@@ -18,6 +18,9 @@
 
 package com.genonbeta.android.framework.util.actionperformer;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 /**
  * Any object implementing this should provide an instance of {@link IPerformerEngine} so that {@link IEngineConnection}
  * objects can connect it.
@@ -27,5 +30,6 @@ public interface PerformerEngineProvider
     /**
      * @return the engine
      */
+    @Nullable
     IPerformerEngine getPerformerEngine();
 }

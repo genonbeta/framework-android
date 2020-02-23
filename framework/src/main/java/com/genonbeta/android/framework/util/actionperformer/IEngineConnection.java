@@ -18,6 +18,7 @@
 
 package com.genonbeta.android.framework.util.actionperformer;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import com.genonbeta.android.framework.object.Selectable;
 
@@ -33,11 +34,6 @@ import java.util.List;
  */
 public interface IEngineConnection<T extends Selectable> extends IBaseEngineConnection
 {
-    /**
-     * @return the engine we are operating on
-     */
-    IPerformerEngine getEngine();
-
     /**
      * @return a quick call of {@link SelectableHost#getSelectableList()}
      * @see #getSelectableHost()
@@ -69,11 +65,6 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
      * @return true when it exists in the host's list
      */
     boolean isSelected(T selectable);
-
-    /**
-     * @param engine is that we are bound to which should be available before the selection process begins
-     */
-    void setEngine(IPerformerEngine engine);
 
     /**
      * @param host to hold the items marked as selected
@@ -121,6 +112,8 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
 
     /**
      * The same as {@link #setSelected(Selectable)}, but this time the position is also provided.
+     *
+     * @param selectable to be altered
      *
      * @see #setSelected(Selectable, boolean, int)
      */

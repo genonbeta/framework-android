@@ -31,13 +31,21 @@ import java.util.List;
  */
 public interface IPerformerEngine
 {
+
+    /**
+     * This is called when we want to ensure if there is any {@link IBaseEngineConnection} on any slot.
+     *
+     * @return true when there is at least one
+     */
+    boolean hasActiveSlots();
+
     /**
      * Ensure that the related connection is known and has an active slot in the list of connections.
      *
      * @param selectionConnection is the connection that should have an active connection
      * @return true if there is already a connection or added a new one.
      */
-    boolean ensureSlot(IBaseEngineConnection selectionConnection);
+    boolean ensureSlot(PerformerEngineProvider provider, IBaseEngineConnection selectionConnection);
 
     /**
      * Remove the connection from the list that is no longer needed.
@@ -48,7 +56,7 @@ public interface IPerformerEngine
     boolean removeSlot(IBaseEngineConnection selectionConnection);
 
     /**
-     * Remove all the connection instances from the known connections list
+     * Remove all the connection instances from the known connections list.
      */
     void removeSlots();
 
@@ -56,9 +64,9 @@ public interface IPerformerEngine
      * This is a call that is usually made by {@link IEngineConnection#setSelected} to notify the
      * {@link PerformerListener} classes.
      *
-     * @param engineConnection {@link IEngineConnection} that is making the call
-     * @param selectable       {@link Selectable} item that is being updated
-     * @param isSelected       true when {@link Selectable} is being marked as selected.
+     * @param engineConnection that is making the call
+     * @param selectable       item that is being updated
+     * @param isSelected       true when {@link Selectable} is being marked as selected
      * @param position         the position of the {@link Selectable} in the list which should be
      *                         {@link RecyclerView#NO_POSITION} if it is not known.
      * @param <T>              type of selectable expected to be received and used over {@link IEngineConnection}
@@ -67,7 +75,7 @@ public interface IPerformerEngine
                                          int position);
 
     /**
-     * Compile the list of selectables that are held in the host of their respective owners in other words, make
+     * Compile the list of selectables that are held in the host of their owners, in other words, make
      * a list of selectables that are marked as selected.
      *
      * @return the compiled list

@@ -36,7 +36,7 @@ public interface PerformerListener
      * @param selectable is the {@link Selectable} whose state is being changed.
      * @param isSelected is the new state that is about to be set
      * @param position   is where the {@link Selectable} is positioned in {@link SelectableProvider#getSelectableList()}
-     * @return true when the state of {@param selectable} can be changed
+     * @return true when the state of param selectable can be changed
      */
     boolean onSelection(IPerformerEngine engine, IBaseEngineConnection owner, Selectable selectable, boolean isSelected,
                         int position);

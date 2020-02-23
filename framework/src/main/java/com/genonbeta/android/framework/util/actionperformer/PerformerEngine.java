@@ -18,6 +18,7 @@
 
 package com.genonbeta.android.framework.util.actionperformer;
 
+import androidx.annotation.NonNull;
 import com.genonbeta.android.framework.object.Selectable;
 
 import java.util.ArrayList;
@@ -53,12 +54,24 @@ public class PerformerEngine implements IPerformerEngine
         return selectableList;
     }
 
+    public boolean hasActiveSlots()
+    {
+        return mConnectionList.size() > 0;
+    }
+
     @Override
-    public boolean ensureSlot(IBaseEngineConnection selectionConnection)
+    public boolean ensureSlot(PerformerEngineProvider provider, IBaseEngineConnection selectionConnection)
     {
         synchronized (mConnectionList) {
-            return mConnectionList.contains(selectionConnection) || mConnectionList.add(selectionConnection);
+            if (mConnectionList.contains(selectionConnection) || mConnectionList.add(selectionConnection)) {
+                if (selectionConnection.getEngineProvider() != provider)
+                    selectionConnection.setEngineProvider(provider);
+
+                return true;
+            }
         }
+
+        return false;
     }
 
     @Override

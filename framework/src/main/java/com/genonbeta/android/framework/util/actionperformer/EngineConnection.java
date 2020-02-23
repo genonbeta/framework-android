@@ -18,24 +18,24 @@
 
 package com.genonbeta.android.framework.util.actionperformer;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import com.genonbeta.android.framework.object.Selectable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EngineConnection<T extends Selectable> implements IEngineConnection<T>
 {
-    private IPerformerEngine mEngine;
+    private PerformerEngineProvider mEngineProvider;
     private SelectableProvider<T> mSelectableProvider;
     private SelectableHost<T> mSelectableHost;
     private CharSequence mDefinitiveTitle;
 
-    public EngineConnection(IPerformerEngine engine, CharSequence title)
+    public EngineConnection(@NonNull PerformerEngineProvider provider, @NonNull SelectableHost<T> host)
     {
-        setEngine(engine);
-        setDefinitiveTitle(title);
+        setEngineProvider(provider);
+        setSelectableHost(host);
     }
 
     protected boolean changeSelectionState(T selectable, boolean selected)
@@ -45,15 +45,16 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
     }
 
     @Override
+    @Nullable
     public CharSequence getDefinitiveTitle()
     {
         return mDefinitiveTitle;
     }
 
-    @Nullable
-    public IPerformerEngine getEngine()
+    @Override
+    public PerformerEngineProvider getEngineProvider()
     {
-        return mEngine;
+        return mEngineProvider;
     }
 
     @Override
@@ -92,10 +93,10 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
         mDefinitiveTitle = title;
     }
 
-    public void setEngine(IPerformerEngine engine)
+    @Override
+    public void setEngineProvider(@Nullable PerformerEngineProvider engineProvider)
     {
-        engine.ensureSlot(this);
-        mEngine = engine;
+        mEngineProvider = engineProvider;
     }
 
     public void setSelectableHost(SelectableHost<T> host)
@@ -139,7 +140,9 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
         if (selected == isSelected(selectable))
             return selected;
 
-        return getEngine() != null && getEngine().check(this, selectable, selected, position)
+        IPerformerEngine performerEngine = getEngineProvider().getPerformerEngine();
+
+        return performerEngine != null && performerEngine.check(this, selectable, selected, position)
                 && changeSelectionState(selectable, selected);
     }
 }

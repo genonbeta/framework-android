@@ -89,6 +89,7 @@ public class PerformerEngine implements IPerformerEngine
         }
     }
 
+    @Override
     public boolean addPerformerListener(PerformerListener listener)
     {
         synchronized (mPerformerListenerList) {
@@ -96,6 +97,7 @@ public class PerformerEngine implements IPerformerEngine
         }
     }
 
+    @Override
     public boolean removePerformerListener(PerformerListener listener)
     {
         synchronized (mPerformerListenerList) {

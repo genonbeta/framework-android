@@ -52,7 +52,7 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
     SelectableHost<T> getSelectableHost();
 
     /**
-     * @return the provider that is used to identify the selectable object when used with {@link #setSelected(int)}
+     * @return the provider that is used to identify the selectable object
      * @see SelectableProvider
      */
     SelectableProvider<T> getSelectableProvider();
@@ -63,7 +63,7 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
      * @param selectable that needs to be checked whether it is stored
      * @return true when it exists in the host's list
      */
-    boolean isSelected(T selectable);
+    boolean isSelectedOnHost(T selectable);
 
     /**
      * @param host to hold the items marked as selected
@@ -77,55 +77,66 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
     void setSelectableProvider(SelectableProvider<T> provider);
 
     /**
-     * Find the selectable in the list with the ViewHolder that knows where it is positioned. What this does is get the
-     * position and call {@link #setSelected(int)}.
+     * Find the selectable using {@link RecyclerView.ViewHolder#getAdapterPosition()} and toggle its selection state.
      *
-     * @param holder to use {@link RecyclerView.ViewHolder#getAdapterPosition()} with
-     * @see #setSelected(Selectable, boolean, int)
+     * @param holder that we will use to find the location
+     * @return true if the given selectable is selected
+     * @throws SelectableNotFoundException when the given position with the holder doesn't point to a selectable
+     * @see #setSelected(Selectable)
      */
-    boolean setSelected(RecyclerView.ViewHolder holder);
+    boolean setSelected(RecyclerView.ViewHolder holder) throws SelectableNotFoundException, CouldNotAlterException;
 
     /**
      * Find the selectable in {@link #getSelectionList()}
      *
-     * @see #setSelected(Selectable, boolean, int)
+     * @throws SelectableNotFoundException when the the given position doesn't point to a selectable
+     * @throws CouldNotAlterException      when the call fails to complete for some reason (see error msg for details)
+     * @see #setSelected(Selectable, int)
      */
-    boolean setSelected(int position);
+    boolean setSelected(int position) throws SelectableNotFoundException, CouldNotAlterException;
 
     /**
-     * Alter the state of the selectable without specifying the its location in {@link #getSelectionList()}. Even
+     * Alter the state of the selectable without specifying its location in {@link #getSelectionList()}. Even
      * though it shouldn't be important to have the position, it may later be required to be used with
      * {@link IPerformerEngine#check(IEngineConnection, Selectable, boolean, int)}. Also because the new state is not
      * specified, it will be the opposite what it previously was.
      *
-     * @see #setSelected(Selectable, boolean, int)
+     * @return true if the given selectable is selected
+     * @throws CouldNotAlterException when the call fails to complete for some reason (see error msg for details)
+     * @see #setSelected(Selectable, int)
      */
-    boolean setSelected(T selectable);
+    boolean setSelected(T selectable) throws CouldNotAlterException;
 
     /**
      * Apart from {@link #setSelected(Selectable)}, this does not make decision on the new state.
      *
-     * @see #setSelected(Selectable, boolean, int)
+     * @see #setSelected(Selectable, int, boolean)
      */
     boolean setSelected(T selectable, boolean selected);
 
     /**
-     * The same as {@link #setSelected(Selectable)}, but this time the position is also provided.
+     * The same as {@link #setSelected(Selectable)}, but this time the position is also provided. Also, because,
+     * the new state will be based upon the old state, the methods that don't take the new state as a parameter will
+     * return the new state instead of the result of the call. The result of the call can still be determined by using
+     * try-catch blocks.
      *
      * @param selectable to be altered
-     * @see #setSelected(Selectable, boolean, int)
+     * @return true if the given selectable is selected
+     * @throws CouldNotAlterException when the call fails to complete for some reason (see error msg for details)
+     * @see #setSelected(Selectable, int, boolean)
      */
-    boolean setSelected(T selectable, int position);
+    boolean setSelected(T selectable, int position) throws CouldNotAlterException;
 
     /**
      * Mark the given selectable with the given state 'selected'. If it is already in that state
      * return true and don't call {@link IPerformerEngine#check(IEngineConnection, Selectable, boolean, int)}.
+     * The return reflects if the call is successful, not the selection state.
      *
      * @param selectable to be altered
-     * @param selected   is the new state
      * @param position   where the selectable is located in {@link #getSelectionList()} which can also be
      *                   {@link RecyclerView#NO_POSITION} if it is not known
+     * @param selected   is the new state
      * @return true if the new state is applied or was already the same
      */
-    boolean setSelected(T selectable, boolean selected, int position);
+    boolean setSelected(T selectable, int position, boolean selected);
 }

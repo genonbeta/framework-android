@@ -81,4 +81,20 @@ public interface IPerformerEngine
      * @return the compiled list
      */
     List<? extends Selectable> getSelectionList();
+
+    /**
+     * Add a listener to be called when something changes on the selection list and other changes.
+     *
+     * @param listener to be added
+     * @return true when the listener already exists or added
+     */
+    boolean addPerformerListener(PerformerListener listener);
+
+    /**
+     * Remove the previously added listener.
+     *
+     * @param listener to be removed
+     * @return true when the listener was in the list and removed
+     */
+    boolean removePerformerListener(PerformerListener listener);
 }

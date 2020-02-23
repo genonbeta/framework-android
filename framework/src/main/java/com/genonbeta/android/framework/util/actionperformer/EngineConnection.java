@@ -25,6 +25,8 @@ import com.genonbeta.android.framework.object.Selectable;
 
 import java.util.List;
 
+import static androidx.recyclerview.widget.RecyclerView.*;
+
 public class EngineConnection<T extends Selectable> implements IEngineConnection<T>
 {
     private PerformerEngineProvider mEngineProvider;
@@ -36,6 +38,9 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
     {
         setEngineProvider(provider);
         setSelectableHost(host);
+
+        if (provider == null || host == null)
+            throw new NullPointerException("Provider or host cannot be null.");
     }
 
     protected boolean changeSelectionState(T selectable, boolean selected)
@@ -63,31 +68,37 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
         return getSelectionList();
     }
 
+    @Override
     public List<T> getHostList()
     {
         return getSelectableHost().getSelectableList();
     }
 
+    @Override
     public List<T> getSelectionList()
     {
         return getSelectableProvider().getSelectableList();
     }
 
+    @Override
     public SelectableHost<T> getSelectableHost()
     {
         return mSelectableHost;
     }
 
+    @Override
     public SelectableProvider<T> getSelectableProvider()
     {
         return mSelectableProvider;
     }
 
-    public boolean isSelected(T selectable)
+    @Override
+    public boolean isSelectedOnHost(T selectable)
     {
         return getHostList().contains(selectable);
     }
 
+    @Override
     public void setDefinitiveTitle(CharSequence title)
     {
         mDefinitiveTitle = title;
@@ -99,46 +110,77 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
         mEngineProvider = engineProvider;
     }
 
+    @Override
     public void setSelectableHost(SelectableHost<T> host)
     {
         mSelectableHost = host;
     }
 
+    @Override
     public void setSelectableProvider(@Nullable SelectableProvider<T> provider)
     {
         mSelectableProvider = provider;
     }
 
-    public boolean setSelected(RecyclerView.ViewHolder holder)
+    @Override
+    public boolean setSelected(ViewHolder holder) throws SelectableNotFoundException, CouldNotAlterException
     {
         return setSelected(holder.getAdapterPosition());
     }
 
-    public boolean setSelected(int position)
+    @Override
+    public boolean setSelected(int position) throws SelectableNotFoundException, CouldNotAlterException
     {
-        return setSelected(mSelectableProvider.getSelectableList().get(position), position);
+        try {
+            return setSelected(mSelectableProvider.getSelectableList().get(position), position);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new SelectableNotFoundException("The selectable at the given position " + position + "could not " +
+                    "be found. ");
+        }
     }
 
-    public boolean setSelected(T selectable)
+    @Override
+    public boolean setSelected(T selectable) throws CouldNotAlterException
     {
-        return setSelected(selectable, !isSelected(selectable));
+        return setSelected(selectable, NO_POSITION);
     }
 
+    @Override
     public boolean setSelected(T selectable, boolean selected)
     {
-        return setSelected(selectable, selected, RecyclerView.NO_POSITION);
+        return setSelected(selectable, NO_POSITION, selected);
     }
 
-    public boolean setSelected(T selectable, int position)
+    @Override
+    public boolean setSelected(T selectable, int position) throws CouldNotAlterException
     {
-        return setSelected(selectable, !isSelected(selectable), position);
+        boolean newState = !isSelectedOnHost(selectable);
+
+        if (!setSelected(selectable, position, newState, true))
+            throw new CouldNotAlterException("The selectable " + selectable + " state couldn't be altered. The " +
+                    "reason may be that the engine was not available or selectable was not allowed to alter state");
+
+        return newState;
     }
 
-    public boolean setSelected(T selectable, boolean selected, int position)
+    @Override
+    public boolean setSelected(T selectable, int position, boolean selected)
+    {
+        return setSelected(selectable, position, selected, false);
+    }
+
+    private boolean setSelected(T selectable, int position, boolean selected, boolean checked)
     {
         // if it is already the same
-        if (selected == isSelected(selectable))
+        if (!checked && selected == isSelectedOnHost(selectable)) {
+            if (selectable.isSelectableSelected() != selected && !selectable.setSelectableSelected(selected)) {
+                // Selectable was known as selected, but not selected and failed to change the state
+                getHostList().remove(selectable);
+                return false;
+            }
+
             return selected;
+        }
 
         IPerformerEngine performerEngine = getEngineProvider().getPerformerEngine();
 

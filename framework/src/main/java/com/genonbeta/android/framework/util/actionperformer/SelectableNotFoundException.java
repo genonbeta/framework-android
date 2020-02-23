@@ -18,18 +18,18 @@
 
 package com.genonbeta.android.framework.util.actionperformer;
 
-import com.genonbeta.android.framework.object.Selectable;
-
-import java.util.List;
-
 /**
- * In order to not limit the list of items that can be provided by the list container to the {@link EngineConnection},
- * this class is expected to be given to it when the selection process is made with a list position like
- * using the {@link IEngineConnection#setSelected(int)} method.
- *
- * @param <T> a derivative of {@link Selectable}
+ * When the selectable is not given and it should be located, this exception may be thrown if it cannot be found.
  */
-public interface SelectableProvider<T extends Selectable>
+public class SelectableNotFoundException extends Exception
 {
-    List<T> getSelectableList();
+    public SelectableNotFoundException()
+    {
+        super();
+    }
+
+    public SelectableNotFoundException(String message)
+    {
+        super(message);
+    }
 }

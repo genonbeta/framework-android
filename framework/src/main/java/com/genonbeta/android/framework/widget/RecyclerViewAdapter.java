@@ -80,12 +80,12 @@ abstract public class RecyclerViewAdapter<T, V extends RecyclerViewAdapter.ViewH
             super(itemView);
         }
 
-        boolean isSelected()
+        public boolean isSelected()
         {
             return itemView.isSelected();
         }
 
-        void setSelected(boolean selected)
+        public void setSelected(boolean selected)
         {
             itemView.setSelected(selected);
         }

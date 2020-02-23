@@ -5,11 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import androidx.core.content.ContextCompat;
 import com.genonbeta.android.framework.R;
 import com.genonbeta.android.framework.widget.recyclerview.fastscroll.Utils;
-
-import androidx.core.content.ContextCompat;
 
 /**
  * Created by Michal on 05/08/16.

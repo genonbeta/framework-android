@@ -1,10 +1,7 @@
 package com.genonbeta.android.framework.widget.recyclerview.fastscroll;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.genonbeta.android.framework.widget.recyclerview.FastScroller;
 
 import java.util.ArrayList;

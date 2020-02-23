@@ -26,5 +26,5 @@ import com.google.android.material.snackbar.Snackbar;
  */
 public interface SnackbarPlacementProvider
 {
-	Snackbar createSnackbar(int resId, Object... objects);
+    Snackbar createSnackbar(int resId, Object... objects);
 }

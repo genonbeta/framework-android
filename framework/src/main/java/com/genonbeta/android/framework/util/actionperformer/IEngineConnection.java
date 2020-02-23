@@ -18,7 +18,6 @@
 
 package com.genonbeta.android.framework.util.actionperformer;
 
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import com.genonbeta.android.framework.object.Selectable;
 
@@ -114,7 +113,6 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
      * The same as {@link #setSelected(Selectable)}, but this time the position is also provided.
      *
      * @param selectable to be altered
-     *
      * @see #setSelected(Selectable, boolean, int)
      */
     boolean setSelected(T selectable, int position);

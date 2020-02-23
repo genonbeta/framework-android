@@ -19,7 +19,6 @@
 package com.genonbeta.android.framework.app;
 
 import android.view.View;
-
 import com.google.android.material.snackbar.Snackbar;
 
 /**
@@ -28,22 +27,22 @@ import com.google.android.material.snackbar.Snackbar;
  */
 public class Fragment extends androidx.fragment.app.Fragment implements FragmentImpl
 {
-	private View mSnackbarContainer;
-	private int mSnackbarLength = Snackbar.LENGTH_LONG;
+    private View mSnackbarContainer;
+    private int mSnackbarLength = Snackbar.LENGTH_LONG;
 
-	public Snackbar createSnackbar(int resId, Object... objects)
-	{
-		View drawOverView = mSnackbarContainer == null ? getView() : mSnackbarContainer;
-		return drawOverView != null ? Snackbar.make(drawOverView, getString(resId, objects), mSnackbarLength) : null;
-	}
+    public Snackbar createSnackbar(int resId, Object... objects)
+    {
+        View drawOverView = mSnackbarContainer == null ? getView() : mSnackbarContainer;
+        return drawOverView != null ? Snackbar.make(drawOverView, getString(resId, objects), mSnackbarLength) : null;
+    }
 
-	public void setSnackbarLength(int length)
-	{
-		mSnackbarLength = length;
-	}
+    public void setSnackbarLength(int length)
+    {
+        mSnackbarLength = length;
+    }
 
-	public void setSnackbarContainer(View view)
-	{
-		mSnackbarContainer = view;
-	}
+    public void setSnackbarContainer(View view)
+    {
+        mSnackbarContainer = view;
+    }
 }

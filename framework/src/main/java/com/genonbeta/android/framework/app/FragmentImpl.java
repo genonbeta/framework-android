@@ -19,10 +19,8 @@
 package com.genonbeta.android.framework.app;
 
 import android.content.Context;
-
-import com.genonbeta.android.framework.ui.callback.SnackbarPlacementProvider;
-
 import androidx.fragment.app.FragmentActivity;
+import com.genonbeta.android.framework.ui.callback.SnackbarPlacementProvider;
 
 /**
  * created by: veli

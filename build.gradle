@@ -29,11 +29,11 @@ allprojects {
 
 ext {
     compileSdkVersion = 29
-    buildToolsVersion = "29.0.2"
+    buildToolsVersion = "29.0.3"
     minSdkVersion = 14
     targetSdkVersion = 29
-    versionName = "1.0.3"
-    versionCode = 7
+    versionName = "1.0.4-local9"
+    versionCode = 8
     appCompatVersion = "1.0.2"
     cardViewVersion = "1.0.0"
     materialVersion = "1.1.0"

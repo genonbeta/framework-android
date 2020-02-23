@@ -23,14 +23,12 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.genonbeta.android.framework.R;
-import com.genonbeta.android.framework.widget.RecyclerViewAdapter;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.genonbeta.android.framework.R;
+import com.genonbeta.android.framework.widget.RecyclerViewAdapter;
 
 /**
  * created by: veli
@@ -38,91 +36,91 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 
 abstract public class RecyclerViewFragment<T, V extends RecyclerViewAdapter.ViewHolder,
-		E extends RecyclerViewAdapter<T, V>> extends ListFragment<RecyclerView, T, E>
+        E extends RecyclerViewAdapter<T, V>> extends ListFragment<RecyclerView, T, E>
 {
-	private RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
 
-	final private Handler mHandler = new Handler();
+    final private Handler mHandler = new Handler();
 
-	final private Runnable mRequestFocus = new Runnable()
-	{
-		@Override
-		public void run()
-		{
-			mRecyclerView.focusableViewAvailable(mRecyclerView);
-		}
-	};
+    final private Runnable mRequestFocus = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            mRecyclerView.focusableViewAvailable(mRecyclerView);
+        }
+    };
 
-	@Override
-	protected void onListRefreshed()
-	{
-		super.onListRefreshed();
+    @Override
+    protected void onListRefreshed()
+    {
+        super.onListRefreshed();
 
-		boolean isEmpty = getAdapter().getCount() == 0;
+        boolean isEmpty = getAdapter().getCount() == 0;
 
-		getEmptyView().setVisibility(isEmpty ? View.VISIBLE : View.GONE);
-		getListView().setVisibility(isEmpty ? View.GONE : View.VISIBLE);
-	}
+        getEmptyView().setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        getListView().setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+    }
 
-	public RecyclerView.LayoutManager onLayoutManager()
-	{
-		return getDefaultLayoutManager();
-	}
+    public RecyclerView.LayoutManager onLayoutManager()
+    {
+        return getDefaultLayoutManager();
+    }
 
-	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
-		View view = super.onCreateView(inflater, container, savedInstanceState);
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
-		mRecyclerView = view.findViewById(R.id.genfw_customListFragment_listView);
+        mRecyclerView = view.findViewById(R.id.genfw_customListFragment_listView);
 
-		if (mRecyclerView == null)
-			mRecyclerView = onListView(getContainer(), getListViewContainer());
+        if (mRecyclerView == null)
+            mRecyclerView = onListView(getContainer(), getListViewContainer());
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	protected RecyclerView onListView(View mainContainer, ViewGroup listViewContainer)
-	{
-		RecyclerView recyclerView = new RecyclerView(getContext());
+    @Override
+    protected RecyclerView onListView(View mainContainer, ViewGroup listViewContainer)
+    {
+        RecyclerView recyclerView = new RecyclerView(getContext());
 
-		recyclerView.setLayoutManager(onLayoutManager());
+        recyclerView.setLayoutManager(onLayoutManager());
 
-		recyclerView.setLayoutParams(new GridLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.MATCH_PARENT));
+        recyclerView.setLayoutParams(new GridLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
 
-		listViewContainer.addView(recyclerView);
+        listViewContainer.addView(recyclerView);
 
-		return recyclerView;
-	}
+        return recyclerView;
+    }
 
-	@Override
+    @Override
 
-	protected void onEnsureList()
-	{
-		mHandler.post(mRequestFocus);
-	}
+    protected void onEnsureList()
+    {
+        mHandler.post(mRequestFocus);
+    }
 
-	@Override
-	public boolean onSetListAdapter(E adapter)
-	{
-		if (mRecyclerView == null)
-			return false;
+    @Override
+    public boolean onSetListAdapter(E adapter)
+    {
+        if (mRecyclerView == null)
+            return false;
 
-		mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(adapter);
 
-		return true;
-	}
+        return true;
+    }
 
-	public RecyclerView.LayoutManager getDefaultLayoutManager()
-	{
-		return new LinearLayoutManager(getContext());
-	}
+    public RecyclerView.LayoutManager getDefaultLayoutManager()
+    {
+        return new LinearLayoutManager(getContext());
+    }
 
-	@Override
-	public RecyclerView getListView()
-	{
-		return mRecyclerView;
-	}
+    @Override
+    public RecyclerView getListView()
+    {
+        return mRecyclerView;
+    }
 }

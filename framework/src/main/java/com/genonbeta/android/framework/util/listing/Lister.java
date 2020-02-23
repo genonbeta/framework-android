@@ -27,26 +27,26 @@ import java.util.List;
  */
 public class Lister<T, V extends Merger<T>>
 {
-	private List<V> mList = new ArrayList<>();
+    private List<V> mList = new ArrayList<>();
 
-	public Lister()
-	{
-	}
+    public Lister()
+    {
+    }
 
-	public List<V> getList()
-	{
-		return mList;
-	}
+    public List<V> getList()
+    {
+        return mList;
+    }
 
-	public void offer(T object, V merger)
-	{
-		int index = getList().indexOf(merger);
+    public void offer(T object, V merger)
+    {
+        int index = getList().indexOf(merger);
 
-		if (index == -1)
-			getList().add(merger);
-		else
-			merger = getList().get(index);
+        if (index == -1)
+            getList().add(merger);
+        else
+            merger = getList().get(index);
 
-		merger.getBelongings().add(object);
-	}
+        merger.getBelongings().add(object);
+    }
 }

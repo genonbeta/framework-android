@@ -22,12 +22,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
+import androidx.annotation.RequiresApi;
 
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
-
-import androidx.annotation.RequiresApi;
 
 /**
  * created by: Veli
@@ -36,119 +35,120 @@ import androidx.annotation.RequiresApi;
 
 abstract public class DocumentFile
 {
-	public static final String TAG = DocumentFile.class.getSimpleName();
+    public static final String TAG = DocumentFile.class.getSimpleName();
 
-	private final DocumentFile mParent;
-	private Uri mOriginalUri;
+    private final DocumentFile mParent;
+    private Uri mOriginalUri;
 
-	public DocumentFile(DocumentFile parent, Uri originalUri)
-	{
-		mParent = parent;
-		setOriginalUri(originalUri);
-	}
+    public DocumentFile(DocumentFile parent, Uri originalUri)
+    {
+        mParent = parent;
+        setOriginalUri(originalUri);
+    }
 
-	public static DocumentFile fromFile(File file)
-	{
-		return new LocalDocumentFile(null, file);
-	}
+    public static DocumentFile fromFile(File file)
+    {
+        return new LocalDocumentFile(null, file);
+    }
 
-	public static DocumentFile fromUri(Context context, Uri uri, boolean prepareTree) throws FileNotFoundException
-	{
-		if (Build.VERSION.SDK_INT >= 21)
-			try {
-				return new TreeDocumentFile(null, context, prepareTree ? prepareUri(uri) : uri, uri);
-			} catch (Exception e) {
-				// it was expected it might not be TreeDocumentFile
-			}
+    public static DocumentFile fromUri(Context context, Uri uri, boolean prepareTree) throws FileNotFoundException
+    {
+        if (Build.VERSION.SDK_INT >= 21)
+            try {
+                return new TreeDocumentFile(null, context, prepareTree ? prepareUri(uri) : uri, uri);
+            } catch (Exception e) {
+                // it was expected it might not be TreeDocumentFile
+            }
 
-		try {
-			return new StreamDocumentFile(new StreamInfo(context, uri), uri);
-		} catch (Exception e) {
-			// Now something is wrong
-		}
+        try {
+            return new StreamDocumentFile(new StreamInfo(context, uri), uri);
+        } catch (Exception e) {
+            // Now something is wrong
+        }
 
-		throw new FileNotFoundException("Failed to create right connection for " + uri.toString());
-	}
+        throw new FileNotFoundException("Failed to create right connection for " + uri.toString());
+    }
 
-	@Override
-	public boolean equals(Object obj)
-	{
-		return obj instanceof DocumentFile && getUri() != null && getUri().equals(((DocumentFile) obj).getUri());
-	}
+    @Override
+    public boolean equals(Object obj)
+    {
+        return obj instanceof DocumentFile && getUri() != null && getUri().equals(((DocumentFile) obj).getUri());
+    }
 
-	public Uri getOriginalUri()
-	{
-		return mOriginalUri;
-	}
+    public Uri getOriginalUri()
+    {
+        return mOriginalUri;
+    }
 
-	protected void setOriginalUri(Uri uri) {
-		mOriginalUri = uri;
-	}
+    protected void setOriginalUri(Uri uri)
+    {
+        mOriginalUri = uri;
+    }
 
-	public abstract DocumentFile createFile(String mimeType, String displayName);
+    public abstract DocumentFile createFile(String mimeType, String displayName);
 
-	public abstract DocumentFile createDirectory(String displayName);
+    public abstract DocumentFile createDirectory(String displayName);
 
-	public abstract Uri getUri();
+    public abstract Uri getUri();
 
-	public abstract String getName();
+    public abstract String getName();
 
-	public abstract String getType();
+    public abstract String getType();
 
-	public DocumentFile getParentFile()
-	{
-		return mParent;
-	}
+    public DocumentFile getParentFile()
+    {
+        return mParent;
+    }
 
-	public abstract boolean isDirectory();
+    public abstract boolean isDirectory();
 
-	public abstract boolean isFile();
+    public abstract boolean isFile();
 
-	public abstract boolean isVirtual();
+    public abstract boolean isVirtual();
 
-	public abstract long lastModified();
+    public abstract long lastModified();
 
-	public abstract long length();
+    public abstract long length();
 
-	public abstract boolean canRead();
+    public abstract boolean canRead();
 
-	public abstract boolean canWrite();
+    public abstract boolean canWrite();
 
-	public abstract boolean delete();
+    public abstract boolean delete();
 
-	public abstract boolean exists();
+    public abstract boolean exists();
 
-	public abstract DocumentFile[] listFiles();
+    public abstract DocumentFile[] listFiles();
 
-	public DocumentFile findFile(String displayName)
-	{
-		for (DocumentFile doc : listFiles()) {
-			if (displayName.equals(doc.getName())) {
-				return doc;
-			}
-		}
-		return null;
-	}
+    public DocumentFile findFile(String displayName)
+    {
+        for (DocumentFile doc : listFiles()) {
+            if (displayName.equals(doc.getName())) {
+                return doc;
+            }
+        }
+        return null;
+    }
 
-	public abstract boolean renameTo(String displayName);
+    public abstract boolean renameTo(String displayName);
 
-	public abstract void sync() throws Exception;
+    public abstract void sync() throws Exception;
 
-	protected static void closeQuietly(Closeable closeable)
-	{
-		if (closeable != null) {
-			try {
-				closeable.close();
-			} catch (RuntimeException rethrown) {
-				throw rethrown;
-			} catch (Exception ignored) {
-			}
-		}
-	}
+    protected static void closeQuietly(Closeable closeable)
+    {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (RuntimeException rethrown) {
+                throw rethrown;
+            } catch (Exception ignored) {
+            }
+        }
+    }
 
-	@RequiresApi(21)
-	protected static Uri prepareUri(Uri treeUri)
-	{
-		return DocumentsContract.buildDocumentUriUsingTree(treeUri, DocumentsContract.getTreeDocumentId(treeUri));
-	}
+    @RequiresApi(21)
+    protected static Uri prepareUri(Uri treeUri)
+    {
+        return DocumentsContract.buildDocumentUriUsingTree(treeUri, DocumentsContract.getTreeDocumentId(treeUri));
+    }
 }

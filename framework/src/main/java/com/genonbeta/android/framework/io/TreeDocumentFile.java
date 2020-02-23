@@ -28,7 +28,6 @@ import android.os.Build;
 import android.provider.DocumentsContract;
 import android.text.TextUtils;
 import android.util.Log;
-
 import androidx.annotation.RequiresApi;
 
 import java.io.FileNotFoundException;

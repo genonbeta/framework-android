@@ -24,8 +24,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import com.genonbeta.android.framework.object.Selectable;
 import com.genonbeta.android.framework.util.actionperformer.IBaseEngineConnection;
 import com.genonbeta.android.framework.util.actionperformer.IEngineConnection;
@@ -70,7 +68,7 @@ abstract public class ActionPerformerMenu implements PerformerListener, MenuItem
 
     @Override
     public boolean onSelection(IPerformerEngine engine, IBaseEngineConnection owner, Selectable selectable,
-                            boolean isSelected, int position)
+                               boolean isSelected, int position)
     {
         return mCallback.onActionPerformerSelection(this, engine, owner, selectable, isSelected, position);
     }

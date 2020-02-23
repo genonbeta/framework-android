@@ -22,16 +22,13 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.widget.TextViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.genonbeta.android.framework.R;
 import com.genonbeta.android.framework.widget.recyclerview.fastscroll.RecyclerViewScrollListener;
 import com.genonbeta.android.framework.widget.recyclerview.fastscroll.SectionTitleProvider;

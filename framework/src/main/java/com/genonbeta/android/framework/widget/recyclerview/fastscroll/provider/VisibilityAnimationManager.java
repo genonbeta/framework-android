@@ -5,11 +5,9 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.view.View;
-
+import androidx.annotation.AnimatorRes;
 import com.genonbeta.android.framework.R;
 import com.genonbeta.android.framework.widget.recyclerview.FastScroller;
-
-import androidx.annotation.AnimatorRes;
 
 /**
  * Created by Michal on 05/08/16.

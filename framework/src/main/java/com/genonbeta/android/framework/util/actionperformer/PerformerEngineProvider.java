@@ -18,7 +18,6 @@
 
 package com.genonbeta.android.framework.util.actionperformer;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /**

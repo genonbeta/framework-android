@@ -19,7 +19,6 @@
 package com.genonbeta.android.framework.util.listing.merger;
 
 import androidx.annotation.NonNull;
-
 import com.genonbeta.android.framework.util.listing.ComparableMerger;
 
 /**
@@ -28,30 +27,30 @@ import com.genonbeta.android.framework.util.listing.ComparableMerger;
  */
 public class StringMerger<T> extends ComparableMerger<T>
 {
-	private String mString;
+    private String mString;
 
-	public StringMerger(String string)
-	{
-		mString = string;
-	}
+    public StringMerger(String string)
+    {
+        mString = string;
+    }
 
-	@Override
-	public boolean equals(Object obj)
-	{
-		return obj.equals(mString);
-	}
+    @Override
+    public boolean equals(Object obj)
+    {
+        return obj.equals(mString);
+    }
 
-	public String getString()
-	{
-		return mString;
-	}
+    public String getString()
+    {
+        return mString;
+    }
 
-	@Override
-	public int compareTo(@NonNull ComparableMerger<T> o)
-	{
-		if (!(o instanceof StringMerger))
-			return -1;
+    @Override
+    public int compareTo(@NonNull ComparableMerger<T> o)
+    {
+        if (!(o instanceof StringMerger))
+            return -1;
 
-		return ((StringMerger) o).getString().compareToIgnoreCase(getString());
-	}
+        return ((StringMerger) o).getString().compareToIgnoreCase(getString());
+    }
 }

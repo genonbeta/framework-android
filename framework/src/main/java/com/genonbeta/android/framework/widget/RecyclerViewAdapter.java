@@ -21,7 +21,6 @@ package com.genonbeta.android.framework.widget;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -30,70 +29,70 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 
 abstract public class RecyclerViewAdapter<T, V extends RecyclerViewAdapter.ViewHolder> extends RecyclerView.Adapter<V>
-		implements ListAdapterImpl<T>
+        implements ListAdapterImpl<T>
 {
-	private Context mContext;
-	private LayoutInflater mInflater;
-	private boolean mHorizontalOrientation;
+    private Context mContext;
+    private LayoutInflater mInflater;
+    private boolean mHorizontalOrientation;
 
-	public RecyclerViewAdapter(Context context)
-	{
-		mContext = context;
-		mInflater = LayoutInflater.from(context);
-	}
+    public RecyclerViewAdapter(Context context)
+    {
+        mContext = context;
+        mInflater = LayoutInflater.from(context);
+    }
 
-	@Override
-	public void onDataSetChanged()
-	{
-		notifyDataSetChanged();
-	}
+    @Override
+    public void onDataSetChanged()
+    {
+        notifyDataSetChanged();
+    }
 
-	public boolean isHorizontalOrientation()
-	{
-		return mHorizontalOrientation;
-	}
+    public boolean isHorizontalOrientation()
+    {
+        return mHorizontalOrientation;
+    }
 
-	public Context getContext()
-	{
-		return mContext;
-	}
+    public Context getContext()
+    {
+        return mContext;
+    }
 
-	@Override
-	public int getCount()
-	{
-		return getItemCount();
-	}
+    @Override
+    public int getCount()
+    {
+        return getItemCount();
+    }
 
-	public LayoutInflater getInflater()
-	{
-		return mInflater;
-	}
+    public LayoutInflater getInflater()
+    {
+        return mInflater;
+    }
 
-	public void setUseHorizontalOrientation(boolean use)
-	{
-		mHorizontalOrientation = use;
-	}
+    public void setUseHorizontalOrientation(boolean use)
+    {
+        mHorizontalOrientation = use;
+    }
 
-	public static class ViewHolder extends RecyclerView.ViewHolder
-	{
-		public ViewHolder(View itemView)
-		{
-			super(itemView);
-		}
+    public static class ViewHolder extends RecyclerView.ViewHolder
+    {
+        public ViewHolder(View itemView)
+        {
+            super(itemView);
+        }
 
-		boolean isSelected()
-		{
-			return itemView.isSelected();
-		}
+        boolean isSelected()
+        {
+            return itemView.isSelected();
+        }
 
-		void setSelected(boolean selected)
-		{
-			itemView.setSelected(selected);
-		}
-	}
+        void setSelected(boolean selected)
+        {
+            itemView.setSelected(selected);
+        }
+    }
 
-	public interface OnClickListener
-	{
-		void onClick(ViewHolder holder);
-	}
+    public interface OnClickListener
+    {
+        void onClick(ViewHolder holder);
+    }
 }

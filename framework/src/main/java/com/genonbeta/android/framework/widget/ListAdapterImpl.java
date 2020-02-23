@@ -21,7 +21,6 @@ package com.genonbeta.android.framework.widget;
 import android.content.Context;
 import android.view.LayoutInflater;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,17 +30,17 @@ import java.util.List;
 
 public interface ListAdapterImpl<T>
 {
-	void onDataSetChanged();
+    void onDataSetChanged();
 
-	List<T> onLoad();
+    List<T> onLoad();
 
-	void onUpdate(List<T> passedItem);
+    void onUpdate(List<T> passedItem);
 
-	Context getContext();
+    Context getContext();
 
-	int getCount();
+    int getCount();
 
-	LayoutInflater getInflater();
+    LayoutInflater getInflater();
 
-	List<T> getList();
+    List<T> getList();
 }

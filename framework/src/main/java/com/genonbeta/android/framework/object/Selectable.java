@@ -32,23 +32,26 @@ import com.genonbeta.android.framework.util.actionperformer.IPerformerEngine;
  */
 public interface Selectable
 {
-	/**
-	 * This is used to help humans identify this selectable.
-	 * @return a human readable string usually distinguishing to be used on a given UI element
-	 */
-	String getSelectableTitle();
+    /**
+     * This is used to help humans identify this selectable.
+     *
+     * @return a human readable string usually distinguishing to be used on a given UI element
+     */
+    String getSelectableTitle();
 
-	/**
-	 * The current state of this selectable.
-	 * @return true when it is marked as selected
-	 */
-	boolean isSelectableSelected();
+    /**
+     * The current state of this selectable.
+     *
+     * @return true when it is marked as selected
+     */
+    boolean isSelectableSelected();
 
-	/**
-	 * This is called when this state of this selectable needs to be altered by an {@link IEngineConnection} instance.
-	 * @param selected true when it needs to be marked as selected
-	 * @return true when it is possible to alter the state
-	 * @see IPerformerEngine#check(IEngineConnection, Selectable, boolean, int)
-	 */
-	boolean setSelectableSelected(boolean selected);
+    /**
+     * This is called when this state of this selectable needs to be altered by an {@link IEngineConnection} instance.
+     *
+     * @param selected true when it needs to be marked as selected
+     * @return true when it is possible to alter the state
+     * @see IPerformerEngine#check(IEngineConnection, Selectable, boolean, int)
+     */
+    boolean setSelectableSelected(boolean selected);
 }

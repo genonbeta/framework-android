@@ -4,10 +4,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.genonbeta.android.framework.widget.recyclerview.FastScroller;
-
 import androidx.annotation.Nullable;
+import com.genonbeta.android.framework.widget.recyclerview.FastScroller;
 
 /**
  * Created by Michal on 05/08/16.

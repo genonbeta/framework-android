@@ -27,12 +27,12 @@ import java.util.List;
  */
 abstract public class Merger<T>
 {
-	public List<T> mBelongings = new ArrayList<>();
+    public List<T> mBelongings = new ArrayList<>();
 
-	abstract public boolean equals(Object obj);
+    abstract public boolean equals(Object obj);
 
-	public List<T> getBelongings()
-	{
-		return mBelongings;
-	}
+    public List<T> getBelongings()
+    {
+        return mBelongings;
+    }
 }

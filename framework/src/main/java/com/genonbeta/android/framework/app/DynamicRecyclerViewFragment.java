@@ -18,11 +18,10 @@
 
 package com.genonbeta.android.framework.app;
 
-import com.genonbeta.android.framework.R;
-import com.genonbeta.android.framework.widget.RecyclerViewAdapter;
-
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.genonbeta.android.framework.R;
+import com.genonbeta.android.framework.widget.RecyclerViewAdapter;
 
 /**
  * created by: Veli

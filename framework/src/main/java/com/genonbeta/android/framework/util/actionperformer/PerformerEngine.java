@@ -18,7 +18,6 @@
 
 package com.genonbeta.android.framework.util.actionperformer;
 
-import androidx.annotation.NonNull;
 import com.genonbeta.android.framework.object.Selectable;
 
 import java.util.ArrayList;

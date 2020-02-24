@@ -26,13 +26,14 @@ import java.util.List;
 public class PerformerEngine implements IPerformerEngine
 {
     final private List<IBaseEngineConnection> mConnectionList = new ArrayList<>();
+    final private List<PerformerCallback> mPerformerCallbackList = new ArrayList<>();
     final private List<PerformerListener> mPerformerListenerList = new ArrayList<>();
 
     public <T extends Selectable> boolean check(IEngineConnection<T> engineConnection, T selectable, boolean isSelected,
                                                 int position)
     {
-        synchronized (mPerformerListenerList) {
-            for (PerformerListener listener : mPerformerListenerList)
+        synchronized (mPerformerCallbackList) {
+            for (PerformerCallback listener : mPerformerCallbackList)
                 if (!listener.onSelection(this, engineConnection, selectable, isSelected, position))
                     return false;
         }
@@ -74,6 +75,16 @@ public class PerformerEngine implements IPerformerEngine
     }
 
     @Override
+    public <T extends Selectable> void informListeners(IEngineConnection<T> engineConnection, T selectable,
+                                                       boolean isSelected, int position)
+    {
+        synchronized (mPerformerListenerList) {
+            for (PerformerListener listener : mPerformerListenerList)
+                listener.onSelected(this, engineConnection, selectable, isSelected, position);
+        }
+    }
+
+    @Override
     public boolean removeSlot(IBaseEngineConnection selectionConnection)
     {
         synchronized (mConnectionList) {
@@ -90,10 +101,26 @@ public class PerformerEngine implements IPerformerEngine
     }
 
     @Override
+    public boolean addPerformerCallback(PerformerCallback callback)
+    {
+        synchronized (mPerformerCallbackList) {
+            return mPerformerCallbackList.contains(callback) || mPerformerCallbackList.add(callback);
+        }
+    }
+
+    @Override
     public boolean addPerformerListener(PerformerListener listener)
     {
         synchronized (mPerformerListenerList) {
             return mPerformerListenerList.contains(listener) || mPerformerListenerList.add(listener);
+        }
+    }
+
+    @Override
+    public boolean removePerformerCallback(PerformerCallback listener)
+    {
+        synchronized (mPerformerCallbackList) {
+            return mPerformerCallbackList.remove(listener);
         }
     }
 

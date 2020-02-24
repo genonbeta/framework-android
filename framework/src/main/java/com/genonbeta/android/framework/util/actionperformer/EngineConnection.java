@@ -24,7 +24,8 @@ import com.genonbeta.android.framework.object.Selectable;
 
 import java.util.List;
 
-import static androidx.recyclerview.widget.RecyclerView.*;
+import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
+import static androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 public class EngineConnection<T extends Selectable> implements IEngineConnection<T>
 {
@@ -39,10 +40,19 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
         setSelectableHost(host);
     }
 
-    protected boolean changeSelectionState(T selectable, boolean selected)
+    protected boolean changeSelectionState(T selectable, boolean selected, int position)
     {
-        return selectable.setSelectableSelected(selected) && (selected && getSelectedItemList().add(selectable))
-                || (!selected && getSelectedItemList().remove(selectable));
+        if (selectable.setSelectableSelected(selected) && (selected && getSelectedItemList().add(selectable))
+                || (!selected && getSelectedItemList().remove(selectable))) {
+            IPerformerEngine engine = getEngineProvider().getPerformerEngine();
+
+            if (engine != null)
+                engine.informListeners(this, selectable, selected, position);
+
+            return  true;
+        }
+
+        return false;
     }
 
     @Override
@@ -136,7 +146,7 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
         try {
             return setSelected(mSelectableProvider.getSelectableList().get(position), position);
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new SelectableNotFoundException("The selectable at the given position " + position + "could not " +
+            throw new SelectableNotFoundException("The selectable at the given position " + position + " could not " +
                     "be found. ");
         }
     }
@@ -187,6 +197,6 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
         IPerformerEngine performerEngine = getEngineProvider().getPerformerEngine();
 
         return performerEngine != null && performerEngine.check(this, selectable, selected, position)
-                && changeSelectionState(selectable, selected);
+                && changeSelectionState(selectable, selected, position);
     }
 }

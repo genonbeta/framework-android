@@ -19,6 +19,7 @@
 package com.genonbeta.android.framework.util.actionperformer;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import com.genonbeta.android.framework.object.Selectable;
 
 import java.util.List;
@@ -68,4 +69,21 @@ public interface IBaseEngineConnection
      * @param title use to identify this connection
      */
     void setDefinitiveTitle(CharSequence title);
+
+    /**
+     * Find the selectable using {@link RecyclerView.ViewHolder#getAdapterPosition()} and toggle its selection state.
+     *
+     * @param holder that we will use to find the location
+     * @return true if the given selectable is selected
+     * @throws SelectableNotFoundException when the given position with the holder doesn't point to a selectable
+     */
+    boolean setSelected(RecyclerView.ViewHolder holder) throws SelectableNotFoundException, CouldNotAlterException;
+
+    /**
+     * Find the selectable in the list that is made available by {@link SelectableProvider}
+     *
+     * @throws SelectableNotFoundException when the the given position doesn't point to a selectable
+     * @throws CouldNotAlterException      when the call fails to complete for some reason (see error msg for details)
+     */
+    boolean setSelected(int position) throws SelectableNotFoundException, CouldNotAlterException;
 }

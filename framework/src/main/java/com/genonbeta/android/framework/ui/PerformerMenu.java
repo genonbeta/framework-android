@@ -82,7 +82,7 @@ public class PerformerMenu implements PerformerCallback, PerformerListener, Menu
     {
         targetMenu.clear();
 
-        if (mCallback.onPerformerMenuList(this, this.getMenuInflater(), targetMenu))
+        if (!mCallback.onPerformerMenuList(this, this.getMenuInflater(), targetMenu))
             return false;
 
         for (int i = 0; i < targetMenu.size(); i++)

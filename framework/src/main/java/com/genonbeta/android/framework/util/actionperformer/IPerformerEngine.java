@@ -89,12 +89,22 @@ public interface IPerformerEngine
                                          int position);
 
     /**
-     * Compile the list of selectables that are held in the host of their owners, in other words, make
-     * a list of selectables that are marked as selected.
+     * Compile the list of selectables that are held in the host of their owners, in other words, make a list of
+     * selectables that are marked as selected from all connections. The problem is, though this is easier to
+     * access each element, it isn't easy to refer to their owners after they are referred to as generic
+     * {@link Selectable}. The better approach is to never mention them outside of their context.
      *
      * @return the compiled list
      */
     List<? extends Selectable> getSelectionList();
+
+    /**
+     * If you need to individually refer to the list elements without losing their identity in the process, you can
+     * use this method to access the each connection and make changes in their own context.
+     *
+     * @return a compiled list of connections
+     */
+    List<IBaseEngineConnection> getConnectionList();
 
     /**
      * Add a listener to be called when something changes on the selection and manipulate it before completing the

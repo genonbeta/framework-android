@@ -93,25 +93,6 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
     void setSelectableProvider(SelectableProvider<T> provider);
 
     /**
-     * Find the selectable using {@link RecyclerView.ViewHolder#getAdapterPosition()} and toggle its selection state.
-     *
-     * @param holder that we will use to find the location
-     * @return true if the given selectable is selected
-     * @throws SelectableNotFoundException when the given position with the holder doesn't point to a selectable
-     * @see #setSelected(Selectable)
-     */
-    boolean setSelected(RecyclerView.ViewHolder holder) throws SelectableNotFoundException, CouldNotAlterException;
-
-    /**
-     * Find the selectable in {@link #getAvailableList()}
-     *
-     * @throws SelectableNotFoundException when the the given position doesn't point to a selectable
-     * @throws CouldNotAlterException      when the call fails to complete for some reason (see error msg for details)
-     * @see #setSelected(Selectable, int)
-     */
-    boolean setSelected(int position) throws SelectableNotFoundException, CouldNotAlterException;
-
-    /**
      * Alter the state of the selectable without specifying its location in {@link #getAvailableList()}. Even
      * though it shouldn't be important to have the position, it may later be required to be used with
      * {@link IPerformerEngine#check(IEngineConnection, Selectable, boolean, int)}. Also because the new state is not

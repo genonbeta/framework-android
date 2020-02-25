@@ -54,6 +54,12 @@ public class PerformerEngine implements IPerformerEngine
         return selectableList;
     }
 
+    @Override
+    public List<IBaseEngineConnection> getConnectionList()
+    {
+        return new ArrayList<>(mConnectionList);
+    }
+
     public boolean hasActiveSlots()
     {
         return mConnectionList.size() > 0;

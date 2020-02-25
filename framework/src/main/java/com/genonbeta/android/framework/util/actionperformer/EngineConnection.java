@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.genonbeta.android.framework.object.Selectable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
@@ -33,11 +34,20 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
     private SelectableProvider<T> mSelectableProvider;
     private SelectableHost<T> mSelectableHost;
     private CharSequence mDefinitiveTitle;
+    private final List<SelectionListener<T>> mSelectionListenerList = new ArrayList<>();
 
     public EngineConnection(@NonNull PerformerEngineProvider provider, @NonNull SelectableHost<T> host)
     {
         setEngineProvider(provider);
         setSelectableHost(host);
+    }
+
+    @Override
+    public boolean addSelectionListener(SelectionListener<T> listener)
+    {
+        synchronized (mSelectionListenerList) {
+            return mSelectionListenerList.contains(listener) || mSelectionListenerList.add(listener);
+        }
     }
 
     protected boolean changeSelectionState(T selectable, boolean selected, int position)
@@ -49,7 +59,10 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
             if (engine != null)
                 engine.informListeners(this, selectable, selected, position);
 
-            return  true;
+            for (SelectionListener<T> listener : mSelectionListenerList)
+                listener.onSelected(engine, this, selectable, selected, position);
+
+            return true;
         }
 
         return false;
@@ -108,6 +121,14 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
     public boolean isSelectedOnHost(T selectable)
     {
         return getSelectedItemList().contains(selectable);
+    }
+
+    @Override
+    public boolean removeSelectionListener(SelectionListener<T> listener)
+    {
+        synchronized (mSelectionListenerList) {
+            return mSelectionListenerList.remove(listener);
+        }
     }
 
     @Override

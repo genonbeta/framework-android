@@ -34,6 +34,14 @@ import java.util.List;
 public interface IEngineConnection<T extends Selectable> extends IBaseEngineConnection
 {
     /**
+     * Add a listener that will only be called by a specific connection or more connections with same T parameter.
+     *
+     * @param listener to be called when the selection state of a selectable changes
+     * @return true when the listener is added or already exist
+     */
+    boolean addSelectionListener(SelectionListener<T> listener);
+
+    /**
      * @return a quick call of {@link SelectableHost#getSelectableList()}
      * @see #getSelectableHost()
      */
@@ -64,6 +72,14 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
      * @return true when it exists in the host's list
      */
     boolean isSelectedOnHost(T selectable);
+
+    /**
+     * Remove the previously added listener.
+     *
+     * @param listener to be removed
+     * @return true when the listened was exist and now removed
+     */
+    boolean removeSelectionListener(SelectionListener<T> listener);
 
     /**
      * @param host to hold the items marked as selected
@@ -130,7 +146,7 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
     /**
      * Mark the given selectable with the given state 'selected'. If it is already in that state
      * return true and don't call {@link IPerformerEngine#check(IEngineConnection, Selectable, boolean, int)}.
-     * The return reflects if the call is successful, not the selection state.
+     * The return value reflects if the call is successful, not the selection state.
      *
      * @param selectable to be altered
      * @param position   where the selectable is located in {@link #getAvailableList()} which can also be
@@ -139,4 +155,18 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
      * @return true if the new state is applied or was already the same
      */
     boolean setSelected(T selectable, int position, boolean selected);
+
+    /**
+     * This is only called by the {@link IEngineConnection} owning it. The idea here is that you want to update
+     * the UI according to changes made on the connection, but don't want to be warned when connections unrelated to
+     * what you are dealing with changes as it happens with {@link PerformerListener} on {@link IPerformerEngine}.
+     *
+     * @param <T> type that this listener will be called from
+     *
+     */
+    public interface SelectionListener<T extends Selectable>
+    {
+        void onSelected(IPerformerEngine engine, IEngineConnection<T> owner, T selectable, boolean isSelected,
+                        int position);
+    }
 }

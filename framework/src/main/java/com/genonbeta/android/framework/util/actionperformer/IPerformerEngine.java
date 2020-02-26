@@ -55,11 +55,26 @@ public interface IPerformerEngine
      * @param selectable       item that is being updated
      * @param isSelected       true when {@link Selectable} is being marked as selected
      * @param position         the position of the {@link Selectable} in the list which should be
-     *                         {@link RecyclerView#NO_POSITION} if it is not known.
+     *                         {@link RecyclerView#NO_POSITION} if it is not known
      * @param <T>              type of selectable expected to be received and used over {@link IEngineConnection}
      */
     <T extends Selectable> void informListeners(IEngineConnection<T> engineConnection, T selectable,
                                                 boolean isSelected, int position);
+
+
+    /**
+     * Inform all the {@link PerformerListener} objects after the {@link #check(IEngineConnection, List, boolean,
+     * int[])} call. Unlike that method, this doesn't have any ability to manipulate the task.
+     *
+     * @param engineConnection that is making the call
+     * @param selectableList   item list that is being updated
+     * @param isSelected       true when {@link Selectable} is being marked as selected
+     * @param positions        the position array of the {@link Selectable} list which can be
+     *                         {@link RecyclerView#NO_POSITION} individually
+     * @param <T>              type of selectable expected to be received and used over {@link IEngineConnection}
+     */
+    <T extends Selectable> void informListeners(IEngineConnection<T> engineConnection, List<T> selectableList,
+                                                boolean isSelected, int[] positions);
 
     /**
      * Remove the connection from the list that is no longer needed.
@@ -87,6 +102,21 @@ public interface IPerformerEngine
      */
     <T extends Selectable> boolean check(IEngineConnection<T> engineConnection, T selectable, boolean isSelected,
                                          int position);
+
+    /**
+     * This is a call that is usually made by {@link IEngineConnection#setSelected} to notify the
+     * {@link PerformerCallback} classes.
+     *
+     * @param engineConnection that is making the call
+     * @param selectableList   that is being updated
+     * @param isSelected       true when the individual {@link Selectable} objects is intended to marked as selected
+     * @param positions        the position array of the individual {@link Selectable} objects which should correspond
+     *                         {@link RecyclerView#NO_POSITION} is not known
+     * @param <T>              type of selectable expected to be received and used over {@link IEngineConnection}
+     * @return
+     */
+    <T extends Selectable> boolean check(IEngineConnection<T> engineConnection, List<T> selectableList,
+                                         boolean isSelected, int[] positions);
 
     /**
      * Compile the list of selectables that are held in the host of their owners, in other words, make a list of

@@ -138,16 +138,52 @@ public interface IEngineConnection<T extends Selectable> extends IBaseEngineConn
     boolean setSelected(T selectable, int position, boolean selected);
 
     /**
+     * Mark all the selectables in the list. This method call has the characteristics similar to {@link #setSelected(
+     *Selectable, int, boolean)} with only difference being this works on more than one selectable at a time. The
+     * listeners for individual items won't be invoked. You should only wait for {@link SelectionListener#onSelected(
+     *IPerformerEngine, IEngineConnection, List, boolean, int[])} to be invoked.
+     *
+     * @param selectableList to be altered
+     * @param positions      where the selectables are located in {@link #getAvailableList()} and which has the same size as
+     *                       'selectableList' parameter
+     * @param selected       is the new state
+     * @return true when, other than selectable rejecting to alter state, everything is okay
+     */
+    boolean setSelected(List<T> selectableList, int[] positions, boolean selected);
+
+    /**
      * This is only called by the {@link IEngineConnection} owning it. The idea here is that you want to update
      * the UI according to changes made on the connection, but don't want to be warned when connections unrelated to
      * what you are dealing with changes as it happens with {@link PerformerListener} on {@link IPerformerEngine}.
      *
      * @param <T> type that this listener will be called from
-     *
      */
     public interface SelectionListener<T extends Selectable>
     {
+        /**
+         * When an individual {@link Selectable} has been changed, this is called.
+         *
+         * @param engine     that is holding an instance of this class
+         * @param owner      is the connection that is making the call
+         * @param selectable is the {@link Selectable} whose state has been changed
+         * @param isSelected is the new state that has been set
+         * @param position   is where the {@link Selectable} is positioned in
+         *                   {@link SelectableProvider#getSelectableList()}
+         */
         void onSelected(IPerformerEngine engine, IEngineConnection<T> owner, T selectable, boolean isSelected,
                         int position);
+
+        /**
+         * When a list of {@link Selectable}s have been changed, this is called.
+         *
+         * @param engine         that is holding an instance of this class
+         * @param owner          is the connection that is making the call
+         * @param selectableList is the list of {@link Selectable}s whose states have been changed
+         * @param isSelected     is the new state that has been set
+         * @param positions      are where the {@link Selectable}s are positioned in
+         *                       {@link SelectableProvider#getSelectableList()}
+         */
+        void onSelected(IPerformerEngine engine, IEngineConnection<T> owner, List<T> selectableList, boolean isSelected,
+                        int[] positions);
     }
 }

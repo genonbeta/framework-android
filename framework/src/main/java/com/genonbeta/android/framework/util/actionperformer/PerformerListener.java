@@ -20,8 +20,38 @@ package com.genonbeta.android.framework.util.actionperformer;
 
 import com.genonbeta.android.framework.object.Selectable;
 
+import java.util.List;
+
+/**
+ * If you want to be informed when {@link IEngineConnection#setSelected} is invoked you can do so with this listener.
+ * Unlike {@link PerformerCallback}, this doesn't have the ability to manipulate the process. This is informed after
+ * the process is done.
+ */
 public interface PerformerListener
 {
+    /**
+     * This is called when the state of a {@link Selectable} has changed.
+     *
+     * @param engine     that is holding an instance of this class
+     * @param owner      is the connection that is making the call
+     * @param selectable is the {@link Selectable} whose state has been changed
+     * @param isSelected is the new state that has been set
+     * @param position   is where the {@link Selectable} is positioned in
+     *                   {@link SelectableProvider#getSelectableList()}
+     */
     void onSelected(IPerformerEngine engine, IBaseEngineConnection owner, Selectable selectable, boolean isSelected,
-                        int position);
+                    int position);
+
+    /**
+     * This method is called after a list of {@link Selectable}s has changed.
+     *
+     * @param engine         that is holding an instance of this class
+     * @param owner          is the connection that is making the call
+     * @param selectableList is the list of {@link Selectable}s whose states have been changed
+     * @param isSelected     is the new state that has been set
+     * @param positions      are where the {@link Selectable}s are positioned in
+     *                       {@link SelectableProvider#getSelectableList()}
+     */
+    void onSelected(IPerformerEngine engine, IBaseEngineConnection owner, List<? extends Selectable> selectableList,
+                    boolean isSelected, int[] positions);
 }

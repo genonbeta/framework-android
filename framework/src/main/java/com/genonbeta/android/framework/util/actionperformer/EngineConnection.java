@@ -68,6 +68,26 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
         return false;
     }
 
+    protected void changeSelectionState(List<T> selectableList, boolean selected, int[] positions)
+    {
+        IPerformerEngine engine = getEngineProvider().getPerformerEngine();
+
+        if(engine != null) {
+            for (T selectable : selectableList) {
+                if (selectable.setSelectableSelected(selected))
+                    if (selected)
+                        getSelectedItemList().add(selectable);
+                    else
+                        getSelectedItemList().remove(selectable);
+            }
+
+            engine.informListeners(this, selectableList, selected, positions);
+
+            for (SelectionListener<T> listener : mSelectionListenerList)
+                listener.onSelected(engine, this, selectableList, selected, positions);
+        }
+    }
+
     @Override
     @Nullable
     public CharSequence getDefinitiveTitle()
@@ -200,6 +220,19 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
     public boolean setSelected(T selectable, int position, boolean selected)
     {
         return setSelected(selectable, position, selected, false);
+    }
+
+    @Override
+    public boolean setSelected(List<T> selectableList, int[] positions, boolean selected)
+    {
+        IPerformerEngine engine = getEngineProvider().getPerformerEngine();
+
+        if (engine != null && engine.check(this, selectableList, selected, positions)) {
+            changeSelectionState(selectableList, selected, positions);
+            return true;
+        }
+
+        return false;
     }
 
     private boolean setSelected(T selectable, int position, boolean selected, boolean checked)

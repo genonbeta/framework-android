@@ -27,6 +27,8 @@ import androidx.appcompat.view.SupportMenuInflater;
 import com.genonbeta.android.framework.object.Selectable;
 import com.genonbeta.android.framework.util.actionperformer.*;
 
+import java.util.List;
+
 /**
  * The idea here is that this class bridges one or more menus with a {@link IEngineConnection} to perform a specific
  * task whenever a new selectable is adder or removed and whenever the any item on a menu is clicked.
@@ -107,11 +109,25 @@ public class PerformerMenu implements PerformerCallback, PerformerListener, Menu
     }
 
     @Override
+    public boolean onSelection(IPerformerEngine engine, IBaseEngineConnection owner,
+                               List<? extends Selectable> selectableList, boolean isSelected, int[] positions)
+    {
+        return mCallback.onPerformerMenuItemSelection(this, engine, owner, selectableList, isSelected,
+                positions);
+    }
+
+    @Override
     public void onSelected(IPerformerEngine engine, IBaseEngineConnection owner, Selectable selectable,
                            boolean isSelected, int position)
     {
-        mCallback.onPerformerMenuItemSelected(this, engine, owner, selectable, isSelected,
-                position);
+        mCallback.onPerformerMenuItemSelected(this, engine, owner, selectable, isSelected, position);
+    }
+
+    @Override
+    public void onSelected(IPerformerEngine engine, IBaseEngineConnection owner,
+                           List<? extends Selectable> selectableList, boolean isSelected, int[] positions)
+    {
+        mCallback.onPerformerMenuItemSelected(this, engine, owner, selectableList, isSelected, positions);
     }
 
     @Override
@@ -161,6 +177,22 @@ public class PerformerMenu implements PerformerCallback, PerformerListener, Menu
                                              int position);
 
         /**
+         * Called when a {@link Selectable} is being altered. This is called during the process which is not still
+         * finished.
+         *
+         * @param performerMenu  instance that redirects the call
+         * @param engine         owning the {@link IBaseEngineConnection}
+         * @param owner          that is managing the selection list and informing the {@link IPerformerEngine}
+         * @param selectableList that is being altered
+         * @param isSelected     is true when the new state is selected or false if otherwise
+         * @param positions      where the selectables are at on {@link SelectableProvider}
+         * @return true if there is no problem with altering the state of selection of the selectable
+         */
+        boolean onPerformerMenuItemSelection(PerformerMenu performerMenu, IPerformerEngine engine,
+                                             IBaseEngineConnection owner, List<? extends Selectable> selectableList,
+                                             boolean isSelected, int[] positions);
+
+        /**
          * Called after the {@link #onPerformerMenuItemSelection(PerformerMenu, IPerformerEngine, IBaseEngineConnection,
          * Selectable, boolean, int)} to inform about the new state of the selectable.
          *
@@ -174,5 +206,20 @@ public class PerformerMenu implements PerformerCallback, PerformerListener, Menu
         void onPerformerMenuItemSelected(PerformerMenu performerMenu, IPerformerEngine engine,
                                          IBaseEngineConnection owner, Selectable selectable, boolean isSelected,
                                          int position);
+
+        /**
+         * Called after the {@link #onPerformerMenuItemSelection(PerformerMenu, IPerformerEngine, IBaseEngineConnection,
+         * List, boolean, int[])} to inform about the new state of the list of selectables.
+         *
+         * @param performerMenu  instance that redirects the call
+         * @param engine         owning the {@link IBaseEngineConnection}
+         * @param owner          that is managing the selection list and informing the {@link IPerformerEngine}
+         * @param selectableList that is being altered
+         * @param isSelected     is true when the new state is selected or false if otherwise
+         * @param positions      where the selectables are at on {@link SelectableProvider}
+         */
+        void onPerformerMenuItemSelected(PerformerMenu performerMenu, IPerformerEngine engine,
+                                         IBaseEngineConnection owner, List<? extends Selectable> selectableList,
+                                         boolean isSelected, int[] positions);
     }
 }

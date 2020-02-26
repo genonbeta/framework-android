@@ -33,8 +33,21 @@ public class PerformerEngine implements IPerformerEngine
                                                 int position)
     {
         synchronized (mPerformerCallbackList) {
-            for (PerformerCallback listener : mPerformerCallbackList)
-                if (!listener.onSelection(this, engineConnection, selectable, isSelected, position))
+            for (PerformerCallback callback : mPerformerCallbackList)
+                if (!callback.onSelection(this, engineConnection, selectable, isSelected, position))
+                    return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public <T extends Selectable> boolean check(IEngineConnection<T> engineConnection, List<T> selectableList,
+                                                boolean isSelected, int[] positions)
+    {
+        synchronized (mPerformerCallbackList) {
+            for (PerformerCallback callback : mPerformerCallbackList)
+                if (!callback.onSelection(this, engineConnection, selectableList, isSelected, positions))
                     return false;
         }
 
@@ -87,6 +100,16 @@ public class PerformerEngine implements IPerformerEngine
         synchronized (mPerformerListenerList) {
             for (PerformerListener listener : mPerformerListenerList)
                 listener.onSelected(this, engineConnection, selectable, isSelected, position);
+        }
+    }
+
+    @Override
+    public <T extends Selectable> void informListeners(IEngineConnection<T> engineConnection, List<T> selectableList,
+                                                       boolean isSelected, int[] positions)
+    {
+        synchronized (mPerformerListenerList) {
+            for (PerformerListener listener : mPerformerListenerList)
+                listener.onSelected(this, engineConnection, selectableList, isSelected, positions);
         }
     }
 

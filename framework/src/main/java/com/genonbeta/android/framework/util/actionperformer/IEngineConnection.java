@@ -34,7 +34,7 @@ import java.util.List;
 public interface IEngineConnection<T extends Selectable> extends IBaseEngineConnection
 {
     /**
-     * Add a listener that will only be called by a specific connection or more connections with same T parameter.
+     * Add a listener that will only be called by this specific connection or more connections with same T parameter.
      *
      * @param listener to be called when the selection state of a selectable changes
      * @return true when the listener is added or already exist

@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.SupportMenuInflater;
 import com.genonbeta.android.framework.object.Selectable;
 import com.genonbeta.android.framework.util.actionperformer.*;
 
@@ -51,7 +52,7 @@ public class PerformerMenu implements PerformerCallback, PerformerListener, Menu
     public PerformerMenu(Context context, @NonNull Callback callback)
     {
         mContext = context;
-        mMenuInflater = new MenuInflater(getContext());
+        mMenuInflater = new SupportMenuInflater(getContext());
         mCallback = callback;
     }
 

@@ -52,9 +52,14 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
 
     protected boolean changeSelectionState(T selectable, boolean selected, int position)
     {
-        if (selectable.setSelectableSelected(selected) && (selected && getSelectedItemList().add(selectable))
-                || (!selected && getSelectedItemList().remove(selectable))) {
+        if (selected != selectable.isSelectableSelected() && selectable.setSelectableSelected(selected)) {
             IPerformerEngine engine = getEngineProvider().getPerformerEngine();
+            SelectableHost<T> host = getSelectableHost();
+
+            if (selected)
+                host.getSelectableList().add(selectable);
+            else
+                host.getSelectableList().remove(selectable);
 
             if (engine != null)
                 engine.informListeners(this, selectable, selected, position);
@@ -74,7 +79,7 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
 
         if(engine != null) {
             for (T selectable : selectableList) {
-                if (selectable.setSelectableSelected(selected))
+                if (selected != selectable.isSelectableSelected() && selectable.setSelectableSelected(selected))
                     if (selected)
                         getSelectedItemList().add(selectable);
                     else

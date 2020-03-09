@@ -18,6 +18,7 @@
 
 package com.genonbeta.android.framework.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -74,18 +75,20 @@ public class PerformerMenu implements PerformerCallback, PerformerListener, Menu
         return mMenuInflater;
     }
 
+    public boolean invokeMenuItemSelected(MenuItem menuItem)
+    {
+        return mCallback.onPerformerMenuSelected(this, menuItem);
+    }
+
     /**
-     * Load the given menu by calling {@link Callback#onPerformerMenuList(PerformerMenu, MenuInflater, Menu)} after
-     * clearing it.
+     * Load the given menu by calling {@link Callback#onPerformerMenuList(PerformerMenu, MenuInflater, Menu)}.
      *
      * @param targetMenu to populate
      * @return true when the given menu is populated
      */
     public boolean load(Menu targetMenu)
     {
-        targetMenu.clear();
-
-        if (!mCallback.onPerformerMenuList(this, this.getMenuInflater(), targetMenu))
+        if (!populateMenu(targetMenu))
             return false;
 
         for (int i = 0; i < targetMenu.size(); i++)
@@ -94,10 +97,47 @@ public class PerformerMenu implements PerformerCallback, PerformerListener, Menu
         return true;
     }
 
+    /**
+     * This is a call similar to {@link android.app.Activity#onCreateOptionsMenu(Menu)}. This creates the menu list
+     * which will be provided by {@link Callback#onPerformerMenuList(PerformerMenu, MenuInflater, Menu)}. If you
+     * are not willing to make the {@link #invokeMenuItemSelected(MenuItem)} calls manually, use
+     * {@link #load(Menu)} so that menu item selection calls will be handled directly by the {@link Callback}.
+     * <p>
+     * The main difference is that when you want to work with more than one {@link IEngineConnection}, the best is to
+     * avoid using this, because you will often will not able to treat each {@link IEngineConnection} individually.
+     * However, for example, if you are using a fragment and want to bridge default fragment callbacks like
+     * {@link androidx.fragment.app.Fragment#onOptionsItemSelected(MenuItem)} with this, it is best to use this so
+     * that you can trigger menu creation as needed. To give an example again, you may want to keep a boolean variable
+     * that goes 'selectionActivated' which will be used to assess whether the menu items will represent the selection.
+     * And to reset the menus you can use {@link Activity#invalidateOptionsMenu()} method.
+     *
+     * @param targetMenu to be populated.
+     */
+    public boolean populateMenu(Menu targetMenu)
+    {
+        return mCallback.onPerformerMenuList(this, this.getMenuInflater(), targetMenu);
+    }
+
+    /**
+     * Register the callbacks of this instance, so that any change will be reported to us.
+     *
+     * @param engine that we are going to be informed about
+     */
     public void setUp(IPerformerEngine engine)
     {
         engine.addPerformerListener(this);
         engine.addPerformerCallback(this);
+    }
+
+    /**
+     * Unregister the previously registered callbacks of this instance.
+     *
+     * @param engine that we are no longer to be informed about
+     */
+    public void dismantle(IPerformerEngine engine)
+    {
+        engine.removePerformerCallback(this);
+        engine.removePerformerListener(this);
     }
 
     @Override
@@ -133,7 +173,7 @@ public class PerformerMenu implements PerformerCallback, PerformerListener, Menu
     @Override
     public boolean onMenuItemClick(MenuItem item)
     {
-        return mCallback.onPerformerMenuClick(this, item);
+        return mCallback.onPerformerMenuSelected(this, item);
     }
 
     /**
@@ -158,7 +198,7 @@ public class PerformerMenu implements PerformerCallback, PerformerListener, Menu
          * @param item          that was clicked.
          * @return true when the input is known and the descendant is not needed the perform any other action
          */
-        boolean onPerformerMenuClick(PerformerMenu performerMenu, MenuItem item);
+        boolean onPerformerMenuSelected(PerformerMenu performerMenu, MenuItem item);
 
         /**
          * Called when a {@link Selectable} is being altered. This is called during the process which is not still

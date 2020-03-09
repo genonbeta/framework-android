@@ -18,6 +18,7 @@
 
 package com.genonbeta.android.framework.util.actionperformer;
 
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.genonbeta.android.framework.object.Selectable;
@@ -30,6 +31,8 @@ import static androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 public class EngineConnection<T extends Selectable> implements IEngineConnection<T>
 {
+    public static final String TAG = EngineConnection.class.getSimpleName();
+
     private PerformerEngineProvider mEngineProvider;
     private SelectableProvider<T> mSelectableProvider;
     private SelectableHost<T> mSelectableHost;
@@ -61,11 +64,13 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
             else
                 host.getSelectableList().remove(selectable);
 
-            if (engine != null)
-                engine.informListeners(this, selectable, selected, position);
+            if (engine != null) {
+                for (SelectionListener<T> listener : mSelectionListenerList)
+                    listener.onSelected(engine, this, selectable, selected, position);
 
-            for (SelectionListener<T> listener : mSelectionListenerList)
-                listener.onSelected(engine, this, selectable, selected, position);
+                engine.informListeners(this, selectable, selected, position);
+            } else
+                Log.d(TAG, "changeSelectionState: Engine is empty. Skipping the call for listeners!");
 
             return true;
         }
@@ -77,20 +82,21 @@ public class EngineConnection<T extends Selectable> implements IEngineConnection
     {
         IPerformerEngine engine = getEngineProvider().getPerformerEngine();
 
-        if(engine != null) {
-            for (T selectable : selectableList) {
-                if (selected != selectable.isSelectableSelected() && selectable.setSelectableSelected(selected))
-                    if (selected)
-                        getSelectedItemList().add(selectable);
-                    else
-                        getSelectedItemList().remove(selectable);
-            }
+        for (T selectable : selectableList) {
+            if (selected != selectable.isSelectableSelected() && selectable.setSelectableSelected(selected))
+                if (selected)
+                    getSelectedItemList().add(selectable);
+                else
+                    getSelectedItemList().remove(selectable);
+        }
 
-            engine.informListeners(this, selectableList, selected, positions);
-
+        if (engine != null) {
             for (SelectionListener<T> listener : mSelectionListenerList)
                 listener.onSelected(engine, this, selectableList, selected, positions);
-        }
+
+            engine.informListeners(this, selectableList, selected, positions);
+        } else
+            Log.d(TAG, "changeSelectionState: Engine is empty. Skipping the call for listeners!");
     }
 
     @Override

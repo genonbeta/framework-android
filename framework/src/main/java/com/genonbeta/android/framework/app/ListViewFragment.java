@@ -35,7 +35,7 @@ import com.genonbeta.android.framework.widget.ListViewAdapter;
  * date: 26.03.2018 10:48
  */
 
-abstract public class ListViewFragment<T, E extends ListViewAdapter<T>> extends ListFragment<ListView, T, E>
+public abstract class ListViewFragment<T, E extends ListViewAdapter<T>> extends ListFragment<ListView, T, E>
 {
     private final Handler mHandler = new Handler();
     private final Runnable mRequestFocus = new Runnable()

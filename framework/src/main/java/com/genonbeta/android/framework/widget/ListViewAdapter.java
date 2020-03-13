@@ -20,13 +20,14 @@ package com.genonbeta.android.framework.widget;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.widget.BaseAdapter;
 
 /**
  * Created by: veli
  * Date: 12/4/16 11:54 PM
  */
 
-abstract public class ListViewAdapter<T> extends android.widget.BaseAdapter implements ListAdapterImpl<T>
+public abstract class ListViewAdapter<T> extends BaseAdapter implements ListAdapterBase<T>
 {
     public Context mContext;
     private LayoutInflater mInflater;

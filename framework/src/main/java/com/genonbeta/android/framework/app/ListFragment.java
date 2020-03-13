@@ -34,7 +34,7 @@ import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
 import androidx.transition.TransitionManager;
 import com.genonbeta.android.framework.R;
-import com.genonbeta.android.framework.widget.ListAdapterImpl;
+import com.genonbeta.android.framework.widget.ListAdapterBase;
 
 import java.util.List;
 
@@ -43,8 +43,8 @@ import java.util.List;
  * Date: 12/3/16 9:57 AM
  */
 
-public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapterImpl<T>> extends Fragment
-        implements ListFragmentImpl<T>
+public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapterBase<T>> extends Fragment
+        implements ListFragmentBase<T>
 {
     public static final String TAG = ListFragment.class.getSimpleName();
 
@@ -356,9 +356,9 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
 
     public static class ListLoader<G> extends AsyncTaskLoader<List<G>>
     {
-        private ListAdapterImpl<G> mAdapter;
+        private ListAdapterBase<G> mAdapter;
 
-        public ListLoader(ListAdapterImpl<G> adapter)
+        public ListLoader(ListAdapterBase<G> adapter)
         {
             super(adapter.getContext());
             mAdapter = adapter;

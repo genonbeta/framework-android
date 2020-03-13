@@ -28,7 +28,7 @@ import java.util.List;
  * date: 26.03.2018 11:12
  */
 
-public interface ListAdapterImpl<T>
+public interface ListAdapterBase<T>
 {
     void onDataSetChanged();
 

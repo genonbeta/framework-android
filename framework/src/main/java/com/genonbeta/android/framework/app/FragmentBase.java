@@ -18,11 +18,20 @@
 
 package com.genonbeta.android.framework.app;
 
+import android.content.Context;
+import android.view.View;
+import androidx.fragment.app.FragmentActivity;
+import com.genonbeta.android.framework.ui.callback.SnackbarPlacementProvider;
+
 /**
  * created by: veli
- * date: 14/04/18 10:38
+ * date: 7/31/18 12:56 PM
  */
-public interface ListFragmentImpl<T> extends FragmentImpl
+public interface FragmentBase extends SnackbarPlacementProvider
 {
-    void refreshList();
+    FragmentActivity getActivity();
+
+    Context getContext();
+
+    View getView();
 }

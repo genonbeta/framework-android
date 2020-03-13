@@ -28,8 +28,8 @@ import androidx.recyclerview.widget.RecyclerView;
  * date: 26.03.2018 11:46
  */
 
-abstract public class RecyclerViewAdapter<T, V extends RecyclerViewAdapter.ViewHolder> extends RecyclerView.Adapter<V>
-        implements ListAdapterImpl<T>
+public abstract class RecyclerViewAdapter<T, V extends RecyclerViewAdapter.ViewHolder> extends RecyclerView.Adapter<V>
+        implements ListAdapterBase<T>
 {
     private Context mContext;
     private LayoutInflater mInflater;

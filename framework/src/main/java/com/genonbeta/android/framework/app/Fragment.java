@@ -26,7 +26,7 @@ import com.google.android.material.snackbar.Snackbar;
  * created by: veli
  * date: 7/31/18 11:54 AM
  */
-public class Fragment extends androidx.fragment.app.Fragment implements FragmentImpl
+public class Fragment extends androidx.fragment.app.Fragment implements FragmentBase
 {
     private View mSnackbarContainer;
     private int mSnackbarLength = Snackbar.LENGTH_LONG;

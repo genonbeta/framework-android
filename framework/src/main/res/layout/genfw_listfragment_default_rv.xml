@@ -21,7 +21,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <include layout="@layout/genfw_layout_listfragment_recyclerview" />
+    <include layout="@layout/genfw_layout_listfragment_recyclerview"/>
 
     <include layout="@layout/genfw_layout_listfragment_emptyview"/>
 

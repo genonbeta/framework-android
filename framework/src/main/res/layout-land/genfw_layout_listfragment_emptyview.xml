@@ -25,8 +25,7 @@
         android:layout_gravity="center"
         android:orientation="vertical"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:visibility="gone">
+        android:paddingRight="15dp">
 
     <LinearLayout
             android:layout_width="wrap_content"
@@ -42,14 +41,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
                 android:layout_marginRight="15dp"
-                android:padding="10dp" />
+                android:padding="10dp"/>
 
         <TextView
                 android:id="@id/genfw_customListFragment_emptyTextView"
                 style="?genfw_customListFragmentEmptyTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="5" />
+                android:maxLines="5"/>
 
     </LinearLayout>
 
@@ -60,13 +59,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            android:visibility="gone" />
-
-    <!-- todo: Use proper layout for the progress bar -->
+            android:visibility="gone"/>
 
     <ProgressBar
             android:id="@id/genfw_customListFragment_progressBar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:indeterminate="true"
+            android:layout_marginTop="16dp"/>
 
 </LinearLayout>

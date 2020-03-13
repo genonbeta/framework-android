@@ -144,8 +144,12 @@ public class GitHubUpdater
                                                 DownloadManager.Request downloadRequest = new DownloadManager.Request(
                                                         Uri.parse(downloadURL));
 
-                                                downloadRequest.setTitle(mContext.getString(R.string.genfw_uwg_downloading_update_title, applicationName, lastVersionName));
-                                                downloadRequest.setDescription(mContext.getString(R.string.genfw_uwg_downloading_update_description, applicationName));
+                                                downloadRequest.setTitle(mContext.getString(
+                                                        R.string.genfw_uwg_downloading_update_title, applicationName,
+                                                        lastVersionName));
+                                                downloadRequest.setDescription(mContext.getString(
+                                                        R.string.genfw_uwg_downloading_update_description,
+                                                        applicationName));
                                                 downloadRequest.setDestinationInExternalPublicDir(
                                                         Environment.DIRECTORY_DOWNLOADS, applicationName + " v"
                                                                 + lastVersionName + ".apk");

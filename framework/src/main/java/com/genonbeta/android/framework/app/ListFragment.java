@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.loader.content.Loader;
+import androidx.transition.TransitionManager;
 import com.genonbeta.android.framework.R;
 import com.genonbeta.android.framework.widget.ListAdapterImpl;
 
@@ -48,10 +48,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
 {
     public static final String TAG = ListFragment.class.getSimpleName();
 
-    public static final int
-            LAYOUT_DEFAULT_RECYCLERVIEW = R.layout.genfw_layout_listfragment_recyclerview,
-            LAYOUT_DEFAULT_EMPTY_LIST = R.layout.genfw_layout_listfragment_emptyview;
-
+    public static final int LAYOUT_DEFAULT_EMPTY_LIST_VIEW = R.layout.genfw_layout_listfragment_emptyview;
     public static final int TASK_ID_REFRESH = 0;
 
     private E mAdapter;
@@ -61,7 +58,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
     private ImageView mEmptyListImageView;
     private ProgressBar mProgressBar;
     private Button mEmptyListActionButton;
-    private LoaderCallbackRefresh mLoaderCallbackRefresh = new LoaderCallbackRefresh();
+    private RefreshLoaderCallback mRefreshLoaderCallback = new RefreshLoaderCallback();
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
@@ -74,7 +71,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        LoaderManager.getInstance(this).initLoader(TASK_ID_REFRESH, null, mLoaderCallbackRefresh);
+        LoaderManager.getInstance(this).initLoader(TASK_ID_REFRESH, null, mRefreshLoaderCallback);
     }
 
     protected void onPrepareRefreshingList()
@@ -157,9 +154,9 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         return getListViewInternal();
     }
 
-    public LoaderCallbackRefresh getLoaderCallbackRefresh()
+    public RefreshLoaderCallback getLoaderCallbackRefresh()
     {
-        return mLoaderCallbackRefresh;
+        return mRefreshLoaderCallback;
     }
 
     public ProgressBar getProgressBar()
@@ -211,7 +208,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         setListAdapter(adapter, hadAdapter);
     }
 
-    abstract protected void setListAdapter(E adapter, boolean hadAdapter);
+    protected abstract void setListAdapter(E adapter, boolean hadAdapter);
 
     public void setListLoading(boolean loading)
     {
@@ -231,13 +228,10 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
                 || emptyListContainer == null || emptyListContainer.getVisibility() != View.VISIBLE)
             return;
 
-        if (animate)
-            progressBar.startAnimation(AnimationUtils.loadAnimation(getContext(), loading ? android.R.anim.fade_in
-                    : android.R.anim.fade_out));
-        else
-            progressBar.clearAnimation();
-
         progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+
+        if (animate)
+            TransitionManager.beginDelayedTransition(emptyListContainer);
     }
 
     protected void setListShown(boolean shown)
@@ -250,22 +244,14 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         Z listView = getListView();
         ViewGroup emptyListContainer = getEmptyListContainerView();
 
-        if (listView != null && emptyListContainer != null && (listView.getVisibility() == View.VISIBLE) != shown) {
-            if (animate) {
-                Animation fadeIn = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
-                Animation fadeOut = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
-
-                listView.startAnimation(shown ? fadeIn : fadeOut);
-                emptyListContainer.startAnimation(shown ? fadeOut : fadeIn);
-            } else {
-                listView.clearAnimation();
-                emptyListContainer.clearAnimation();
-            }
+        if (listView != null && (listView.getVisibility() == View.VISIBLE) != shown) {
+            listView.setVisibility(shown ? View.VISIBLE : View.GONE);
+            if (animate)
+                listView.startAnimation(AnimationUtils.loadAnimation(getContext(), shown ? android.R.anim.fade_in
+                        : android.R.anim.fade_out));
         }
 
-        if (listView != null)
-            listView.setVisibility(shown ? View.VISIBLE : View.GONE);
-        if (emptyListContainer != null)
+        if (emptyListContainer != null && (emptyListContainer.getVisibility() == View.VISIBLE) == shown)
             emptyListContainer.setVisibility(shown ? View.GONE : View.VISIBLE);
     }
 
@@ -279,22 +265,22 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         mProgressBar = progressBar;
     }
 
-    public void showEmptyActionButton(boolean show)
+    public void showEmptyListActionButton(boolean show)
     {
         getEmptyListActionButton().setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    public void useEmptyActionButton(String buttonText, View.OnClickListener clickListener)
+    public void useEmptyListActionButton(String buttonText, View.OnClickListener clickListener)
     {
         Button actionButton = getEmptyListActionButton();
 
         actionButton.setText(buttonText);
         actionButton.setOnClickListener(clickListener);
 
-        showEmptyActionButton(true);
+        showEmptyListActionButton(true);
     }
 
-    private class LoaderCallbackRefresh implements LoaderManager.LoaderCallbacks<List<T>>
+    private class RefreshLoaderCallback implements LoaderManager.LoaderCallbacks<List<T>>
     {
         private boolean mRunning = false;
         private boolean mReloadRequested = false;
@@ -306,7 +292,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
             mReloadRequested = false;
             mRunning = true;
 
-            if (mAdapter.getCount() == 0)
+            if (getAdapter().getCount() == 0)
                 setListShown(false);
 
             setListLoading(true);
@@ -320,9 +306,8 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
             if (isResumed()) {
                 onPrepareRefreshingList();
 
-                mAdapter.onUpdate(data);
-                mAdapter.onDataSetChanged();
-
+                getAdapter().onUpdate(data);
+                getAdapter().onDataSetChanged();
                 setListLoading(false);
                 onListRefreshed();
             }
@@ -352,7 +337,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         public void refresh()
         {
             LoaderManager.getInstance(ListFragment.this)
-                    .restartLoader(TASK_ID_REFRESH, null, mLoaderCallbackRefresh);
+                    .restartLoader(TASK_ID_REFRESH, null, mRefreshLoaderCallback);
         }
 
         public boolean requestRefresh()

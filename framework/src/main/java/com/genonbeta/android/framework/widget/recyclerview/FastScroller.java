@@ -75,12 +75,14 @@ public class FastScroller extends LinearLayout
     {
         super(context, attrs, defStyle);
         setClipChildren(false);
-        TypedArray style = context.obtainStyledAttributes(attrs, R.styleable.GenfwFastScroller, R.attr.genfw_fastScrollStyle, 0);
+        TypedArray style = context.obtainStyledAttributes(attrs, R.styleable.GenfwFastScroller,
+                R.attr.genfw_fastScrollStyle, 0);
 
         try {
             mBubbleColor = style.getColor(R.styleable.GenfwFastScroller_genfw_fastScrollBubbleColor, STYLE_NONE);
             mHandleColor = style.getColor(R.styleable.GenfwFastScroller_genfw_fastScrollHandleColor, STYLE_NONE);
-            mBubbleTextAppearance = style.getResourceId(R.styleable.GenfwFastScroller_genfw_fastScrollBubbleTextAppearance, STYLE_NONE);
+            mBubbleTextAppearance = style.getResourceId(
+                    R.styleable.GenfwFastScroller_genfw_fastScrollBubbleTextAppearance, STYLE_NONE);
         } finally {
             style.recycle();
         }
@@ -90,9 +92,9 @@ public class FastScroller extends LinearLayout
     }
 
     /**
-     * Attach the {@link FastScroller} to {@link RecyclerView}. ShoulmHandle.setMinimumHeight((int) computedExtent);d be used after the adapter is set
-     * to the {@link RecyclerView}. If the adapter implements SectionTitleProvider, the FastScroller
-     * will show a bubble with title.
+     * Attach the {@link FastScroller} to {@link RecyclerView}. Should mHandle.setMinimumHeight((int) computedExtent);
+     * be used after the adapter is set to the {@link RecyclerView}. If the adapter implements SectionTitleProvider,
+     * the FastScroller will show a bubble with title.
      *
      * @param recyclerView A {@link RecyclerView} to attach the {@link FastScroller} to.
      */

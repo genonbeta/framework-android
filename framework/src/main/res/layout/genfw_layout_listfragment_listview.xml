@@ -17,11 +17,8 @@
   ~ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
   -->
 
-<resources>
-    <item name="genfw_customListFragment_listView" type="id"/>
-    <item name="genfw_customListFragment_emptyView" type="id"/>
-    <item name="genfw_customListFragment_emptyImageView" type="id"/>
-    <item name="genfw_customListFragment_emptyTextView" type="id"/>
-    <item name="genfw_customListFragment_emptyActionButton" type="id"/>
-    <item name="genfw_customListFragment_progressBar" type="id"/>
-</resources>
+<ListView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@id/genfw_customListFragment_listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>

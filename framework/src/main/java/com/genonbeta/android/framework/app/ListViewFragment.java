@@ -23,10 +23,10 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.genonbeta.android.framework.R;
 import com.genonbeta.android.framework.widget.ListViewAdapter;
 
@@ -37,21 +37,16 @@ import com.genonbeta.android.framework.widget.ListViewAdapter;
 
 abstract public class ListViewFragment<T, E extends ListViewAdapter<T>> extends ListFragment<ListView, T, E>
 {
-    private ListView mListView;
-
-    final private Handler mHandler = new Handler();
-
-    final private Runnable mRequestFocus = new Runnable()
+    private final Handler mHandler = new Handler();
+    private final Runnable mRequestFocus = new Runnable()
     {
         @Override
         public void run()
         {
-            mListView.focusableViewAvailable(mListView);
+            getListViewInternal().focusableViewAvailable(getListView());
         }
     };
-
-    final private AdapterView.OnItemClickListener mOnClickListener
-            = new AdapterView.OnItemClickListener()
+    private final AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener()
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position, long id)
@@ -61,59 +56,26 @@ abstract public class ListViewFragment<T, E extends ListViewAdapter<T>> extends 
     };
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-
-        mListView = view.findViewById(R.id.genfw_customListFragment_listView);
-
-        if (mListView == null)
-            mListView = onListView(getContainer(), getListViewContainer());
-
-        mListView.setOnItemClickListener(mOnClickListener);
-        mListView.setEmptyView(getEmptyView());
-
-        return view;
-    }
-
-    @Override
-    protected ListView onListView(View mainContainer, ViewGroup listViewContainer)
-    {
-        ListView listView = new ListView(getContext());
-
-        listView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-
-        listViewContainer.addView(listView);
-
-        return listView;
-    }
-
-    @Override
-    protected void onEnsureList()
-    {
-        mListView.setEmptyView(getEmptyView());
-        mHandler.post(mRequestFocus);
-    }
-
-    @Override
-    public boolean onSetListAdapter(E adapter)
-    {
-        if (mListView == null)
-            return false;
-
-        mListView.setAdapter(adapter);
-
-        return true;
+        super.onViewCreated(view, savedInstanceState);
+        getListView().setOnItemClickListener(mOnClickListener);
     }
 
     public void onListItemClick(ListView l, View v, int position, long id)
     {
     }
 
-    public ListView getListView()
+    @Override
+    protected void ensureList()
     {
-        onEnsureList();
-        return mListView;
+        getListViewInternal().setEmptyView(getEmptyListContainerView());
+        mHandler.post(mRequestFocus);
+    }
+
+    @Override
+    protected View generateDefaultView(LayoutInflater inflater, ViewGroup container, Bundle savedState)
+    {
+        return inflater.inflate(R.layout.genfw_listfragment_default_lv, container, false);
     }
 }

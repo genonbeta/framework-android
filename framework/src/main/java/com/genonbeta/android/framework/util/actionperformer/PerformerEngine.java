@@ -25,9 +25,9 @@ import java.util.List;
 
 public class PerformerEngine implements IPerformerEngine
 {
-    final private List<IBaseEngineConnection> mConnectionList = new ArrayList<>();
-    final private List<PerformerCallback> mPerformerCallbackList = new ArrayList<>();
-    final private List<PerformerListener> mPerformerListenerList = new ArrayList<>();
+    private final List<IBaseEngineConnection> mConnectionList = new ArrayList<>();
+    private final List<PerformerCallback> mPerformerCallbackList = new ArrayList<>();
+    private final List<PerformerListener> mPerformerListenerList = new ArrayList<>();
 
     public <T extends Selectable> boolean check(IEngineConnection<T> engineConnection, T selectable, boolean isSelected,
                                                 int position)

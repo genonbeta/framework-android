@@ -19,6 +19,7 @@
 package com.genonbeta.android.framework.app;
 
 import android.view.View;
+import com.genonbeta.android.framework.R;
 import com.google.android.material.snackbar.Snackbar;
 
 /**
@@ -34,6 +35,31 @@ public class Fragment extends androidx.fragment.app.Fragment implements Fragment
     {
         View drawOverView = mSnackbarContainer == null ? getView() : mSnackbarContainer;
         return drawOverView != null ? Snackbar.make(drawOverView, getString(resId, objects), mSnackbarLength) : null;
+    }
+
+    public boolean isScreenLandscape()
+    {
+        return getResources().getBoolean(R.bool.genfw_screen_isLandscape);
+    }
+
+    public boolean isScreenSmall()
+    {
+        return getResources().getBoolean(R.bool.genfw_screen_isSmall);
+    }
+
+    public boolean isScreenNormal()
+    {
+        return getResources().getBoolean(R.bool.genfw_screen_isNormal);
+    }
+
+    public boolean isScreenLarge()
+    {
+        return getResources().getBoolean(R.bool.genfw_screen_isLarge);
+    }
+
+    public boolean isXScreenLarge()
+    {
+        return getResources().getBoolean(R.bool.genfw_screen_isXLarge);
     }
 
     public void setSnackbarLength(int length)

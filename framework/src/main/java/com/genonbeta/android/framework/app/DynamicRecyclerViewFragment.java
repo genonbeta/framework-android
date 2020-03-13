@@ -31,18 +31,16 @@ import com.genonbeta.android.framework.widget.RecyclerViewAdapter;
 abstract public class DynamicRecyclerViewFragment<T, V extends RecyclerViewAdapter.ViewHolder,
         Z extends RecyclerViewAdapter<T, V>> extends RecyclerViewFragment<T, V, Z>
 {
-    @Override
-    public RecyclerView.LayoutManager onLayoutManager()
+    public GridLayoutManager generateGridLayoutManager()
     {
         return new GridLayoutManager(getContext(), isScreenLarge() && !isHorizontalOrientation() ? 2 : 1,
                 isHorizontalOrientation() ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL, false);
     }
 
     @Override
-    public boolean onSetListAdapter(Z adapter)
+    public RecyclerView.LayoutManager getLayoutManager()
     {
-        adapter.setUseHorizontalOrientation(isHorizontalOrientation());
-        return super.onSetListAdapter(adapter);
+        return generateGridLayoutManager();
     }
 
     public boolean isHorizontalOrientation()
@@ -50,28 +48,10 @@ abstract public class DynamicRecyclerViewFragment<T, V extends RecyclerViewAdapt
         return false;
     }
 
-    public boolean isScreenLandscape()
+    @Override
+    protected void setListAdapter(Z adapter, boolean hadAdapter)
     {
-        return getContext() != null && getContext().getResources().getBoolean(R.bool.genfw_screen_isLandscape);
-    }
-
-    public boolean isScreenSmall()
-    {
-        return getContext() != null && getContext().getResources().getBoolean(R.bool.genfw_screen_isSmall);
-    }
-
-    public boolean isScreenNormal()
-    {
-        return getContext() != null && getContext().getResources().getBoolean(R.bool.genfw_screen_isNormal);
-    }
-
-    public boolean isScreenLarge()
-    {
-        return getContext() != null && getContext().getResources().getBoolean(R.bool.genfw_screen_isLarge);
-    }
-
-    public boolean isXScreenLarge()
-    {
-        return getContext() != null && getContext().getResources().getBoolean(R.bool.genfw_screen_isXLarge);
+        adapter.setUseHorizontalOrientation(isHorizontalOrientation());
+        super.setListAdapter(adapter, hadAdapter);
     }
 }

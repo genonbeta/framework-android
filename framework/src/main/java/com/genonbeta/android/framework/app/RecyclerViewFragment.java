@@ -24,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.genonbeta.android.framework.R;
@@ -38,16 +37,13 @@ import com.genonbeta.android.framework.widget.RecyclerViewAdapter;
 abstract public class RecyclerViewFragment<T, V extends RecyclerViewAdapter.ViewHolder,
         E extends RecyclerViewAdapter<T, V>> extends ListFragment<RecyclerView, T, E>
 {
-    private RecyclerView mRecyclerView;
-
-    final private Handler mHandler = new Handler();
-
-    final private Runnable mRequestFocus = new Runnable()
+    private final Handler mHandler = new Handler();
+    private final Runnable mRequestFocus = new Runnable()
     {
         @Override
         public void run()
         {
-            mRecyclerView.focusableViewAvailable(mRecyclerView);
+            getListViewInternal().focusableViewAvailable(getListViewInternal());
         }
     };
 
@@ -55,72 +51,36 @@ abstract public class RecyclerViewFragment<T, V extends RecyclerViewAdapter.View
     protected void onListRefreshed()
     {
         super.onListRefreshed();
-
-        boolean isEmpty = getAdapter().getCount() == 0;
-
-        getEmptyView().setVisibility(isEmpty ? View.VISIBLE : View.GONE);
-        getListView().setVisibility(isEmpty ? View.GONE : View.VISIBLE);
-    }
-
-    public RecyclerView.LayoutManager onLayoutManager()
-    {
-        return getDefaultLayoutManager();
+        setListShown(getAdapter().getCount() > 0);
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-
-        mRecyclerView = view.findViewById(R.id.genfw_customListFragment_listView);
-
-        if (mRecyclerView == null)
-            mRecyclerView = onListView(getContainer(), getListViewContainer());
-
-        return view;
-    }
-
-    @Override
-    protected RecyclerView onListView(View mainContainer, ViewGroup listViewContainer)
-    {
-        RecyclerView recyclerView = new RecyclerView(getContext());
-
-        recyclerView.setLayoutManager(onLayoutManager());
-
-        recyclerView.setLayoutParams(new GridLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-
-        listViewContainer.addView(recyclerView);
-
-        return recyclerView;
-    }
-
-    @Override
-
-    protected void onEnsureList()
+    protected void ensureList()
     {
         mHandler.post(mRequestFocus);
     }
 
-    @Override
-    public boolean onSetListAdapter(E adapter)
-    {
-        if (mRecyclerView == null)
-            return false;
-
-        mRecyclerView.setAdapter(adapter);
-
-        return true;
-    }
-
-    public RecyclerView.LayoutManager getDefaultLayoutManager()
+    public RecyclerView.LayoutManager getLayoutManager()
     {
         return new LinearLayoutManager(getContext());
     }
 
     @Override
-    public RecyclerView getListView()
+    protected View generateDefaultView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedState)
     {
-        return mRecyclerView;
+        return inflater.inflate(R.layout.genfw_listfragment_default_rv, container, false);
+    }
+
+    @Override
+    protected void setListAdapter(E adapter, boolean hadAdapter)
+    {
+        getListView().setAdapter(adapter);
+    }
+
+    @Override
+    protected void setListView(RecyclerView listView)
+    {
+        super.setListView(listView);
+        listView.setLayoutManager(getLayoutManager());
     }
 }

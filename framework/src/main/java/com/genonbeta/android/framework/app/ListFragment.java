@@ -46,76 +46,36 @@ import java.util.List;
 public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapterImpl<T>> extends Fragment
         implements ListFragmentImpl<T>
 {
-    public static final String TAG = "ListFragment";
+    public static final String TAG = ListFragment.class.getSimpleName();
+
+    public static final int
+            LAYOUT_DEFAULT_RECYCLERVIEW = R.layout.genfw_layout_listfragment_recyclerview,
+            LAYOUT_DEFAULT_EMPTY_LIST = R.layout.genfw_layout_listfragment_emptyview;
 
     public static final int TASK_ID_REFRESH = 0;
 
     private E mAdapter;
-    private ViewGroup mListViewContainer;
-    private ViewGroup mCustomViewContainer;
-    private ViewGroup mDefaultViewContainer;
-    private ViewGroup mContainer;
-    private ViewGroup mEmptyView;
-    private TextView mEmptyText;
-    private ImageView mEmptyImage;
-    private ProgressBar mProgressView;
-    private Button mEmptyActionButton;
+    private Z mListView;
+    private ViewGroup mEmptyListContainerView;
+    private TextView mEmptyListTextView;
+    private ImageView mEmptyListImageView;
+    private ProgressBar mProgressBar;
+    private Button mEmptyListActionButton;
     private LoaderCallbackRefresh mLoaderCallbackRefresh = new LoaderCallbackRefresh();
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        mAdapter = onAdapter();
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        super.onCreateView(inflater, container, savedInstanceState);
-
-        View view = getLayoutInflater().inflate(R.layout.genfw_abstract_list_fragment, container, false);
-
-        mCustomViewContainer = view.findViewById(R.id.genfw_customListFragment_customViewContainer);
-        mDefaultViewContainer = view.findViewById(R.id.genfw_customListFragment_defaultViewContainer);
-        mListViewContainer = view.findViewById(R.id.genfw_customListFragment_listViewContainer);
-        mContainer = view.findViewById(R.id.genfw_customListFragment_container);
-        mEmptyView = view.findViewById(R.id.genfw_customListFragment_emptyView);
-        mEmptyText = view.findViewById(R.id.genfw_customListFragment_emptyTextView);
-        mEmptyImage = view.findViewById(R.id.genfw_customListFragment_emptyImageView);
-        mProgressView = view.findViewById(R.id.genfw_customListFragment_progressView);
-        mEmptyActionButton = view.findViewById(R.id.genfw_customListFragment_emptyActionButton);
-
-        return view;
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-
-        if (getListView() != null && getListView().getId() != R.id.genfw_customListFragment_listView)
-            getListView().setId(R.id.genfw_customListFragment_listView);
+        findViewDefaultsFromMainView();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-
-        setListAdapter(mAdapter);
         LoaderManager.getInstance(this).initLoader(TASK_ID_REFRESH, null, mLoaderCallbackRefresh);
     }
-
-    public abstract E onAdapter();
-
-    protected abstract void onEnsureList();
-
-    protected abstract Z onListView(View mainContainer, ViewGroup listViewContainer);
-
-    public abstract boolean onSetListAdapter(E adapter);
-
-    public abstract Z getListView();
 
     protected void onPrepareRefreshingList()
     {
@@ -130,51 +90,55 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         return new ListLoader<>(mAdapter);
     }
 
+    protected abstract void ensureList();
+
+    protected void findViewDefaultsFrom(View view)
+    {
+        if (view == null)
+            return;
+
+        setListView((Z) view.findViewById(R.id.genfw_customListFragment_listView));
+        setEmptyListContainerView((ViewGroup) view.findViewById(R.id.genfw_customListFragment_emptyView));
+        setEmptyListTextView((TextView) view.findViewById(R.id.genfw_customListFragment_emptyTextView));
+        setEmptyListImageView((ImageView) view.findViewById(R.id.genfw_customListFragment_emptyImageView));
+        setEmptyListActionButton((Button) view.findViewById(R.id.genfw_customListFragment_emptyActionButton));
+        setProgressBar((ProgressBar) view.findViewById(R.id.genfw_customListFragment_progressBar));
+    }
+
+    protected void findViewDefaultsFromMainView()
+    {
+        findViewDefaultsFrom(getView());
+    }
+
     public E getAdapter()
     {
         return mAdapter;
     }
 
-    protected ViewGroup getContainer()
+    protected abstract View generateDefaultView(LayoutInflater inflater, ViewGroup container, Bundle savedState);
+
+    public ViewGroup getEmptyListContainerView()
     {
-        return mContainer;
+        ensureList();
+        return mEmptyListContainerView;
     }
 
-    public ViewGroup getCustomViewContainer()
+    public ImageView getEmptyListImageView()
     {
-        return mCustomViewContainer;
+        ensureList();
+        return mEmptyListImageView;
     }
 
-    public ViewGroup getDefaultViewContainer()
+    public TextView getEmptyListTextView()
     {
-        return mDefaultViewContainer;
+        ensureList();
+        return mEmptyListTextView;
     }
 
-    public ImageView getEmptyImage()
+    public Button getEmptyListActionButton()
     {
-        onEnsureList();
-        return mEmptyImage;
-    }
-
-    public TextView getEmptyText()
-    {
-        onEnsureList();
-        return mEmptyText;
-    }
-
-    protected ViewGroup getEmptyView()
-    {
-        return mEmptyView;
-    }
-
-    protected ViewGroup getListViewContainer()
-    {
-        return mListViewContainer;
-    }
-
-    public LoaderCallbackRefresh getLoaderCallbackRefresh()
-    {
-        return mLoaderCallbackRefresh;
+        ensureList();
+        return mEmptyListActionButton;
     }
 
     public E getListAdapter()
@@ -182,15 +146,26 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         return mAdapter;
     }
 
-    public ProgressBar getProgressView()
+    protected final Z getListViewInternal()
     {
-        onEnsureList();
-        return mProgressView;
+        return mListView;
     }
 
-    public Button getEmptyActionButton()
+    public Z getListView()
     {
-        return mEmptyActionButton;
+        ensureList();
+        return getListViewInternal();
+    }
+
+    public LoaderCallbackRefresh getLoaderCallbackRefresh()
+    {
+        return mLoaderCallbackRefresh;
+    }
+
+    public ProgressBar getProgressBar()
+    {
+        ensureList();
+        return mProgressBar;
     }
 
     public void refreshList()
@@ -198,82 +173,125 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
         getLoaderCallbackRefresh().requestRefresh();
     }
 
-    public void setEmptyImage(int resId)
+    protected void setEmptyListContainerView(ViewGroup container)
     {
-        onEnsureList();
-        mEmptyImage.setImageResource(resId);
+        mEmptyListContainerView = container;
     }
 
-    public void setEmptyText(CharSequence text)
+    protected void setEmptyListActionButton(Button button)
     {
-        onEnsureList();
-        mEmptyText.setText(text);
+        mEmptyListActionButton = button;
     }
 
-    public void setListAdapter(E adapter)
+    protected void setEmptyListImage(int resId)
+    {
+        getEmptyListImageView().setImageResource(resId);
+    }
+
+    protected void setEmptyListImageView(ImageView view)
+    {
+        mEmptyListImageView = view;
+    }
+
+    protected void setEmptyListText(CharSequence text)
+    {
+        getEmptyListTextView().setText(text);
+    }
+
+    protected void setEmptyListTextView(TextView view)
+    {
+        mEmptyListTextView = view;
+    }
+
+    protected void setListAdapter(E adapter)
     {
         boolean hadAdapter = mAdapter != null;
         mAdapter = adapter;
 
-        if (onSetListAdapter(adapter)) {
-            if (mContainer.getVisibility() != View.VISIBLE && !hadAdapter)
-                setListShown(true, getView().getWindowToken() != null);
-        }
+        setListAdapter(adapter, hadAdapter);
     }
 
-    public void setListShown(boolean shown)
+    abstract protected void setListAdapter(E adapter, boolean hadAdapter);
+
+    public void setListLoading(boolean loading)
+    {
+        setListLoading(loading, true);
+    }
+
+    public void setListLoading(boolean loading, boolean animate)
+    {
+        ensureList();
+
+        ProgressBar progressBar = getProgressBar();
+        ViewGroup emptyListContainer = getEmptyListContainerView();
+
+        // progress is shown == loading
+        // container is not shown == progress cannot be shown
+        if (progressBar == null || (progressBar.getVisibility() == View.VISIBLE) == loading
+                || emptyListContainer == null || emptyListContainer.getVisibility() != View.VISIBLE)
+            return;
+
+        if (animate)
+            progressBar.startAnimation(AnimationUtils.loadAnimation(getContext(), loading ? android.R.anim.fade_in
+                    : android.R.anim.fade_out));
+        else
+            progressBar.clearAnimation();
+
+        progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+    }
+
+    protected void setListShown(boolean shown)
     {
         setListShown(shown, true);
     }
 
-    public void setListShown(boolean shown, boolean animate)
+    protected void setListShown(boolean shown, boolean animate)
     {
-        onEnsureList();
+        Z listView = getListView();
+        ViewGroup emptyListContainer = getEmptyListContainerView();
 
-        if ((mContainer.getVisibility() == View.VISIBLE) == shown)
-            return;
+        if (listView != null && emptyListContainer != null && (listView.getVisibility() == View.VISIBLE) != shown) {
+            if (animate) {
+                Animation fadeIn = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
+                Animation fadeOut = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
 
-        if (animate) {
-            Animation fadeOut = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
-            Animation fadeIn = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
-
-            mProgressView.startAnimation(shown ? fadeOut : fadeIn);
-            mContainer.startAnimation(shown ? fadeIn : fadeOut);
-        } else {
-            mProgressView.clearAnimation();
-            mContainer.clearAnimation();
+                listView.startAnimation(shown ? fadeIn : fadeOut);
+                emptyListContainer.startAnimation(shown ? fadeOut : fadeIn);
+            } else {
+                listView.clearAnimation();
+                emptyListContainer.clearAnimation();
+            }
         }
 
-        mContainer.setVisibility(shown ? View.VISIBLE : View.GONE);
-        mProgressView.setVisibility(shown ? View.GONE : View.VISIBLE);
+        if (listView != null)
+            listView.setVisibility(shown ? View.VISIBLE : View.GONE);
+        if (emptyListContainer != null)
+            emptyListContainer.setVisibility(shown ? View.GONE : View.VISIBLE);
     }
 
-    public void showCustomView(boolean shown)
+    protected void setListView(Z listView)
     {
-        mCustomViewContainer.setVisibility(shown ? View.VISIBLE : View.GONE);
-        mDefaultViewContainer.setVisibility(shown ? View.GONE : View.VISIBLE);
+        mListView = listView;
     }
 
-    public boolean toggleCustomView()
+    protected void setProgressBar(ProgressBar progressBar)
     {
-        boolean isVisible = getCustomViewContainer().getVisibility() == View.VISIBLE;
+        mProgressBar = progressBar;
+    }
 
-        showCustomView(!isVisible);
-
-        return !isVisible;
+    public void showEmptyActionButton(boolean show)
+    {
+        getEmptyListActionButton().setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     public void useEmptyActionButton(String buttonText, View.OnClickListener clickListener)
     {
-        mEmptyActionButton.setText(buttonText);
-        mEmptyActionButton.setOnClickListener(clickListener);
+        Button actionButton = getEmptyListActionButton();
 
-        useEmptyActionButton(true);
-    }
+        actionButton.setText(buttonText);
+        actionButton.setOnClickListener(clickListener);
 
-    public void useEmptyActionButton(boolean use)
-    {
-        mEmptyActionButton.setVisibility(use ? View.VISIBLE : View.GONE);
+        showEmptyActionButton(true);
     }
 
     private class LoaderCallbackRefresh implements LoaderManager.LoaderCallbacks<List<T>>
@@ -291,6 +309,8 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
             if (mAdapter.getCount() == 0)
                 setListShown(false);
 
+            setListLoading(true);
+
             return createLoader();
         }
 
@@ -303,7 +323,7 @@ public abstract class ListFragment<Z extends ViewGroup, T, E extends ListAdapter
                 mAdapter.onUpdate(data);
                 mAdapter.onDataSetChanged();
 
-                setListShown(true);
+                setListLoading(false);
                 onListRefreshed();
             }
 

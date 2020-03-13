@@ -24,9 +24,7 @@ import java.util.List;
 /**
  * created by: Veli
  * date: 20.11.2017 00:15
- */
-
-/**
+ *
  * A way of informing threads and objects. The aim is to make sure the same object can be used more than one places
  * (threads and UI elements). It also helps you make you are closing or removing temporary objects when the task is
  * cancelled.
@@ -54,6 +52,7 @@ public class Interrupter
      * Check if the callback was previously added to the list.
      *
      * @param closer to be checked
+
      * @return true if it was already added
      */
     public boolean hasCloser(Closer closer)

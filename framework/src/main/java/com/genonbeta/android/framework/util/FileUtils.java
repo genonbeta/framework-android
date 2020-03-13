@@ -75,8 +75,7 @@ public class FileUtils
             if (existingOne != null && !existingOne.isDirectory())
                 throw new IOException("A file exists for of directory name: " + currentPath + " ; " + path);
 
-            currentDirectory = existingOne == null && createIfNotExists
-                    ? currentDirectory.createDirectory(currentPath)
+            currentDirectory = existingOne == null && createIfNotExists ? currentDirectory.createDirectory(currentPath)
                     : existingOne;
         }
 

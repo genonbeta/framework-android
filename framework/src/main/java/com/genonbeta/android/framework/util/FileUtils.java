@@ -24,7 +24,7 @@ public class FileUtils
 {
     public static final String TAG = FileUtils.class.getSimpleName();
 
-    public static void copy(Context context, DocumentFile source, DocumentFile destination, Interrupter interrupter,
+    public static void copy(Context context, DocumentFile source, DocumentFile destination, Stoppable stoppable,
                             int bufferLength, int socketTimeout) throws Exception
     {
         ContentResolver resolver = context.getContentResolver();
@@ -47,7 +47,7 @@ public class FileUtils
                 lastRead = System.currentTimeMillis();
             }
 
-            if ((System.currentTimeMillis() - lastRead) > socketTimeout || interrupter.interrupted())
+            if ((System.currentTimeMillis() - lastRead) > socketTimeout || stoppable.isInterrupted())
                 throw new Exception("Timed out or interrupted. Exiting!");
         }
 
@@ -236,11 +236,11 @@ public class FileUtils
     }
 
     public static boolean move(Context context, DocumentFile targetFile, DocumentFile destinationFile,
-                               Interrupter interrupter, int bufferLength, int socketTimeout) throws Exception
+                               Stoppable stoppable, int bufferLength, int socketTimeout) throws Exception
     {
         if (!(targetFile instanceof LocalDocumentFile) || !(destinationFile instanceof LocalDocumentFile)
                 || !((LocalDocumentFile) targetFile).getFile().renameTo(((LocalDocumentFile) destinationFile).getFile()))
-            copy(context, targetFile, destinationFile, interrupter, bufferLength, socketTimeout);
+            copy(context, targetFile, destinationFile, stoppable, bufferLength, socketTimeout);
 
         // syncs the file with latest data if it is database based
         destinationFile.sync();

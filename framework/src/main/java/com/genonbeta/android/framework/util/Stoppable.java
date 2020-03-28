@@ -29,24 +29,15 @@ import java.util.List;
  * (threads and UI elements). It also helps you make you are closing or removing temporary objects when the task is
  * cancelled.
  */
-public class Interrupter
+public interface Stoppable
 {
-    private boolean mInterrupted = false;
-    private boolean mInterruptedByUser = false;
-    private List<Closer> mClosers = new ArrayList<>();
-
     /**
      * Add an object to be invoked when the task is cancelled.
      *
      * @param closer to be called when the {@link #interrupt()} is called
      * @return true when adding to the list is successful
      */
-    public boolean addCloser(Closer closer)
-    {
-        synchronized (getClosers()) {
-            return getClosers().add(closer);
-        }
-    }
+    boolean addCloser(Closer closer);
 
     /**
      * Check if the callback was previously added to the list.
@@ -54,52 +45,35 @@ public class Interrupter
      * @param closer to be checked
      * @return true if it was already added
      */
-    public boolean hasCloser(Closer closer)
-    {
-        synchronized (getClosers()) {
-            return getClosers().contains(closer);
-        }
-    }
+    boolean hasCloser(Closer closer);
 
     /**
      * Objects pending to be called when the task is called.
      *
      * @return pending list of objects
      */
-    public List<Closer> getClosers()
-    {
-        return mClosers;
-    }
+    List<Closer> getClosers();
 
     /**
      * Ensure if the task has been cancelled.
      *
      * @return true if it was
      */
-    public boolean interrupted()
-    {
-        return mInterrupted;
-    }
+    boolean isInterrupted();
 
     /**
      * Was the task called with {@link #interrupt(boolean)} with userAction boolean set to true?
      *
      * @return true if the was cancelled with userAction boolean was true
      */
-    public boolean interruptedByUser()
-    {
-        return mInterruptedByUser;
-    }
+    boolean isInterruptedByUser();
 
     /**
      * Cancel the task with 'userAction' is set to true.
      *
      * @see #interrupt(boolean)
      */
-    public boolean interrupt()
-    {
-        return interrupt(true);
-    }
+    boolean interrupt();
 
     /**
      * Cancel the task and call the {@link Closer} objects if it was not cancelled previously.
@@ -107,23 +81,7 @@ public class Interrupter
      * @param userAction true if it is performed by user
      * @return true if it was not cancelled before
      */
-    public boolean interrupt(boolean userAction)
-    {
-        if (userAction)
-            mInterruptedByUser = true;
-
-        if (interrupted())
-            return false;
-
-        mInterrupted = true;
-
-        synchronized (getClosers()) {
-            for (Closer closer : getClosers())
-                closer.onClose(userAction);
-        }
-
-        return true;
-    }
+    boolean interrupt(boolean userAction);
 
     /**
      * Remove a previously added @link Closer} object from the list.
@@ -131,56 +89,35 @@ public class Interrupter
      * @param closer to be removed
      * @return true if it has been removed
      */
-    public boolean removeCloser(Closer closer)
-    {
-        synchronized (getClosers()) {
-            return getClosers().remove(closer);
-        }
-    }
+    boolean removeCloser(Closer closer);
 
     /**
      * @see #reset(boolean)
      */
-    public void reset()
-    {
-        reset(true);
-    }
+    void reset();
 
     /**
      * Reset the interrupted flags and remove {@link Closer} objects if needed.
      *
      * @param resetClosers true if you want to remove the {@link Closer} objects
      */
-    public void reset(boolean resetClosers)
-    {
-        mInterrupted = false;
-        mInterruptedByUser = false;
-
-        if (resetClosers)
-            removeClosers();
-    }
+    void reset(boolean resetClosers);
 
     /**
      * Remove all closers.
      */
-    public void removeClosers()
-    {
-        synchronized (getClosers()) {
-            getClosers().clear();
-        }
-    }
+    void removeClosers();
 
     /**
-     * Closers are a way to clean a cancelled task. The idea here is supply the {@link Interrupter} class with
-     * these that are emoving or reverting changes made during the process.
+     * When interrupted, invoke this. This will not be called a second time.
      */
-    public interface Closer
+    interface Closer
     {
         /**
-         * {@link Interrupter#interrupt(boolean)} will invoke this when an instance is provided using
-         * {@link Interrupter#addCloser(Closer)}.
+         * {@link Stoppable#interrupt(boolean)} will invoke this when an instance is provided using
+         * {@link Stoppable#addCloser(Closer)}.
          *
-         * @param userAction true the {@link Interrupter#interrupt(boolean)} is invoked with userAction = true
+         * @param userAction true the {@link Stoppable#interrupt(boolean)} is invoked with userAction = true
          */
         void onClose(boolean userAction);
     }

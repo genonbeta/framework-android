@@ -9,12 +9,11 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
-        classpath "com.github.dcendents:android-maven-gradle-plugin:2.1"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath "com.github.dcendents:android-maven-gradle-plugin:2.1"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
 
@@ -32,10 +31,10 @@ ext {
     buildToolsVersion = "29.0.3"
     minSdkVersion = 14
     targetSdkVersion = 29
-    versionName = "1.0.4-local46"
+    versionName = "1.0.4"
     versionCode = 8
-    appCompatVersion = "1.0.2"
+    appCompatVersion = "1.2.0"
     cardViewVersion = "1.0.0"
-    materialVersion = "1.1.0"
+    materialVersion = "1.2.0"
     recyclerViewVersion = "1.0.0"
 }

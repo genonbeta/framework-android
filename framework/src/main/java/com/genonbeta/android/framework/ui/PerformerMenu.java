@@ -42,9 +42,9 @@ import java.util.List;
  */
 public class PerformerMenu implements PerformerCallback, PerformerListener, MenuItem.OnMenuItemClickListener
 {
-    private Context mContext;
-    private MenuInflater mMenuInflater;
-    private Callback mCallback;
+    private final Context mContext;
+    private final MenuInflater mMenuInflater;
+    private final Callback mCallback;
 
     /**
      * Create an instance of PerformerMenu that to handle menus and listeners together.
